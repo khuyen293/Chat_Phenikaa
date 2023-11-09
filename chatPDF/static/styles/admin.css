@@ -1,0 +1,66 @@
+.admin-menu{
+    width: 20%;
+    background:#111222;
+    height: 100vh;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.admin-menu-list li{
+    padding: 16px;
+    border-bottom: 1px solid #545456;
+
+}
+
+.admin-menu-list li:hover{
+    background-color: #3d3d3e;
+    border-radius: 5px;
+}
+
+.admin-item.active{
+    background-color: #3d3d3e;
+    border-radius: 5px;
+}
+
+.admin-content{
+    width: 80%;
+}
+.admin-list{
+    width: 100%;
+    height: 100vh;
+    cursor: pointer;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.admin-list.active{
+    display: flex;
+}
+
+
+.admin-content-table{
+    width: 100%;
+}
+
+.admin-content-table th,
+.admin-content-table td{
+    padding: 5px;
+}
+
+.btn-add, 
+.btn-close{
+    min-width: 66px;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-add{
+    background-color: var(--primary-color);
+}
+
+.btn-close{
+    background-color: var(--primary-color-2);
+}

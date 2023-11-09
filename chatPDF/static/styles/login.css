@@ -1,0 +1,51 @@
+.container-login{
+    width: 100%;
+    position:fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background:#111222;
+    align-items: center;
+    justify-content: center;
+} 
+
+.login-form{
+    background-color: #fff;
+    width: 420px;
+    position: relative;
+    animation: LoginFadeIn ease 1.5s;
+    box-shadow: 0 5px 10px rgba(198, 196, 196, 0.5);
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 0 20px;
+}
+
+
+@keyframes LoginFadeIn{
+    from{
+        opacity: 0;
+        transform: translateY(-100%);
+
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+
+    }
+}
+
+.login-close{
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: var(--primary-color);
+    padding: 0 8px;
+    cursor: pointer;
+}
+
+.login-close:hover{
+    color: var(--white-color);
+    background: var(--primary-color-2);
+    border-radius: 5px;
+}

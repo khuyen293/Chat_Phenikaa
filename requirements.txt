@@ -1,0 +1,11 @@
+flask
+datetime
+SQLAlchemy
+bcrypt
+openai
+langchain
+PyPDF
+python-dotenv
+faiss-cpu
+dotenv
+tiktoken

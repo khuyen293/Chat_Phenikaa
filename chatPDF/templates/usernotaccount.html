@@ -1,0 +1,116 @@
+{% extends 'base.html'%} {% block content %}
+
+<div class="d-flex user">
+  <div class="notaccount">
+    <h4>Câu hỏi thường gặp</h4>
+    <ul class="notaccount-list">
+      <li>Có thể chat ngay bây giờ không?</li>
+      <li>Tiêu chí tuyển sinh trong năm nay?</li>
+      <li>Điều kiện nhập học của trường là gì?</li>
+      <li>Những quy định của trường phenikaa là gì?</li>
+    </ul>
+    <a href="{{url_for('login')}}" class="btn home-btn-text">Đăng Nhập</a>
+  </div>
+  <div class="user-chatPDF">
+    <div class="user-chatPDF-conversation scroll" id="scrollable-content">
+      {% for conversation in conversations %}
+      <div class="user-chat">
+        <div class="chat-tk" style="display: flex; justify-content: flex-end;">
+          <span class="username">HK</span>
+        </div>
+        <div class="chat-item">{{ conversation.user_chat }}</div>
+      </div>
+
+      <div class="chat-chat">
+        <div class="chat-AI">
+          <span>
+            <i class="fas fa-comment"></i>
+          </span>
+        </div>
+        <div class="chat-item">{{ conversation.bot_chat }}</div>
+      </div>
+
+      {% endfor %}
+    </div>
+    <div class="background-image">
+    </div>
+    <div class="chatPDF-message">
+      <textarea id="messageInput" rows="1" placeholder="Send a message" class=""></textarea>
+      <button class="chatPDF-message-btn" id="sendMessageButton">
+        <i class="fas fa-play"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  var listItems = document.querySelectorAll('.notaccount-list li');
+  var textarea = document.getElementById('messageInput');
+  listItems.forEach(function (item) {
+    item.addEventListener('click', function () {
+      var itemText = item.textContent;
+      textarea.value = itemText;
+    });
+  });
+</script>
+<script>
+  // Gửi tin nhắn
+  const messageInput = document.getElementById('messageInput');
+  const sendMessageButton = document.getElementById('sendMessageButton');
+  const conversationContainer = document.querySelector('.user-chatPDF-conversation');
+
+  sendMessageButton.addEventListener('click', function () {
+    const user_chat = messageInput.value;
+    const bot_chat = 'chat';
+    messageInput.value = '';
+
+    const userChatDiv = document.createElement('div');
+    userChatDiv.className = 'user-chat';
+    userChatDiv.innerHTML = `
+        <div class="chat-tk" style="display: flex; justify-content: flex-end;" id="scrollable-content">
+          <span class="username">HK</span>
+        </div>
+        <div class="chat-item">${user_chat}</div>
+      `;
+    conversationContainer.appendChild(userChatDiv);
+
+    const chatChatDiv = document.createElement('div');
+    chatChatDiv.className = 'chat-chat';
+    chatChatDiv.innerHTML = `
+        <div class="chat-AI">
+          <span>
+            <i class="fas fa-comment"></i>
+          </span>
+        </div>
+        <div class="chat-item"><i class="fa-solid fa-ellipsis fa-spin fa-spin-reverse chat-item-icon"></i></div>
+      `;
+    conversationContainer.appendChild(chatChatDiv);
+
+    fetch('/add_conversation', {
+      method: 'POST',
+      body: JSON.stringify({ user_chat: user_chat }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        chatChatDiv.innerHTML = `
+            <div class="chat-AI">
+              <span>
+                <i class="fas fa-comment"></i>
+              </span>
+            </div>
+            <div class="chat-item">${data.bot_chat}</div>
+          `;
+        conversationContainer.appendChild(chatChatDiv);   
+      });
+  });
+</script>
+
+<script>
+  var scrollableContent = document.getElementById("scrollable-content");
+  scrollableContent.scrollTop = scrollableContent.scrollHeight;
+</script>
+
+{% endblock %}

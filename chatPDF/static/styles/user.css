@@ -1,0 +1,379 @@
+/* Tai khoan khi đăng nhập */
+.user {
+    max-height: 100vh;
+    position: sticky;
+}
+
+.header-img {
+    width: 200px;
+}
+
+.header-btn {
+    height: 40px;
+    text-align: center;
+}
+
+.user-new {
+    z-index: 1;
+    position: sticky;
+    top: 1px;
+    left: 0;
+    padding: 10px 0;
+    border: 2px solid #111222;
+    border-radius: 10px;
+    text-align: center;
+    margin-right: 8px;
+}
+
+.user-new a {
+    color: var(--primary-color-2);
+    
+}
+
+.user-new a span{
+    all:unset;
+    border: none;
+}
+
+
+.user-list-menu {
+    height: 100vh;
+    width: 20%;
+    background: #090d17;
+    border-right: 2px solid #111222;
+    border-top-right-radius: 10px;
+    padding: 8px 0 8px 8px;
+}
+
+
+.user-menu-topic {
+    position: sticky;
+    height: 78vh;
+    padding: 10px 0;
+}
+
+
+.topic-list-title {
+    color: #545456;
+    font-size: 14px;
+    padding-left: 8px;
+    font-weight: 600;
+
+}
+
+.topic-list-item{
+    padding: 10px 0 10px 8px;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.topic-list-item:hover .rename-topic
+.topic-list-item:hover .delete-topic{
+    display: inline-block;
+    color: red;
+}
+
+.topic-list-item a {
+    text-decoration: none;
+    color: white;
+}
+
+.topic-item-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    width: 180px;
+
+}
+
+.topic-item-name span{
+    margin-left: 8px;
+
+}
+
+.topic-list-item:hover,
+.user-account-info:hover {
+    background-color: #3d3d3e;
+    border-radius: 5px;
+}
+
+.topic-item-icon{
+    display: block;
+    width: 100%;
+}
+
+.topic-item-icon button {
+    all: unset;
+    padding-left: 8px;
+}
+
+.user-account{
+    border-top: 1px solid #111222;
+    top: 0;
+    position: sticky;
+    overflow: hidden;
+    z-index: 1;
+    padding-top: 8px;
+}
+
+.user-account a{
+    text-decoration: none;
+}
+
+.user-account-title{
+    color: #545456;
+    font-size: 15px;
+
+}
+
+.user-account-header{
+    padding: 0 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-account-info{
+    padding-left: 8px;
+}
+
+.account-btn {
+    background: none;
+    margin-top: 16px;
+    border: none;
+    padding: 8px 0;
+    outline: none;
+}
+
+.user-logout{
+    font-weight: 600;
+
+}
+
+.user-logout a{
+    color: #545456;
+}
+
+.account-btn:focus,
+.chatPDF-message-btn:focus {
+    outline: none;
+}
+
+.user-account-box-img {
+    font-weight: 600;
+    color: white;
+
+}
+
+.user-account-box-img span {
+    padding: 8px;
+    background-color: var(--primary-color-2);
+}
+
+.account-btn {
+    padding: 8px 0;
+}
+
+.user-account-name {
+    font-size: 13px;
+    margin-left: 8px;
+    color: white;
+    font-weight: 600;
+}
+
+.user-chatPDF {
+    width: 80%;
+    position: relative;
+
+}
+
+.background-image {
+    background-image: url('../images/logo.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    width: 400px;
+    height: 400px;
+    top: -70%;
+    left: 30%;
+    object-fit: scale-down;
+    opacity: 0.1;
+}
+
+.user-chatPDF-conversation {
+    position: sticky;
+    height: 85vh;
+}
+
+.scroll {
+    overflow-y: scroll;
+    overflow-x: auto;
+    z-index: 1;
+}
+
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 15px;
+    height: 20px;
+}
+
+.user-chat,
+.chat-chat {
+    padding: 12px 150px;
+}
+
+.chat-tk span {
+    /* background-color: var(--primary-color-2);
+    padding: 7px 10px;
+    color: white;
+    font-weight: 600;
+    border-radius: 31% 69% 50% 50% / 35% 29% 71% 65%; */
+    color: var(--primary-color-2);
+    font-weight: 600;
+    padding: 7px 10px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #cacaca, #f0f0f0);
+    box-shadow:  5px 5px 0px #5a5a5a,
+             -5px -5px 0px #ffffff;
+}
+
+.chat-AI{
+    display: flex;
+}
+
+.chat-AI span {
+    /* background-color: var(--primary-color);
+    color: white;
+    padding: 8px 10px;
+    border-radius: 66% 34% 51% 49% / 17% 55% 45% 83% ; */
+    color: var(--primary-color);
+    font-weight: 600;
+    padding: 7px 10px;
+    border-radius: 10px;
+    background: #e0e0e0;
+    box-shadow: inset 5px 5px 0px #a8a8a8,
+            inset -5px -5px 0px #ffffff;
+}
+
+.chat-item {
+    text-align: justify;
+    color: white;
+    
+}
+
+.chat-item-left{
+    display: flex; 
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.chat-item-right{
+    display: flex; 
+    justify-content: flex-end;    
+}
+
+.chat-item-message{
+    background-color: #212121;
+    color: white;
+    border-radius: 25px;
+    padding: 5px 8px;
+    /* font-weight: 500; */
+    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+    transition: 300ms ease-in-out;
+    border: none;
+    outline: none;
+    margin: 10px 35px 10px 85px;
+
+}
+
+.chat-item-messageAI{
+    background-color: #333;
+    color: white;
+    border-radius: 25px;
+    padding: 5px 8px;
+    /* font-weight: 500; */
+    box-shadow: inset 2px 5px 10px rgba(0,0,0,0.3);
+    transition: 300ms ease-in-out;
+    border: none;
+    outline: none;
+    line-height: 30px;
+    margin: 10px 85px 10px 35px;
+}
+
+.chat-item-icon{
+    font-size: 25px;
+}
+
+.chat-chat .chat-item {
+    color: var(--primary-color-2);
+}
+
+.chatPDF-message {
+    width: 74%;
+    margin: 32px 150px;
+    bottom: 32px;
+    border-radius: 25px;
+    cursor: text;
+    position: sticky;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #545456;
+    padding: 0 16px;
+    background-color: white;
+}
+
+.chatPDF-message textarea {
+    width: 100% !important;
+    all: unset;
+    padding: 6px 0;
+    margin-right: 8px; 
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
+
+.chatPDF-message-btn {
+    all: unset;
+    color: #757575;
+}
+
+/* Tài khoản khi không đăng nhập */
+
+.notaccount {
+    background-color: #111222;
+    padding: 16px;
+    bottom: 0;
+    float: inline-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 20%;
+}
+
+.notaccount h4 {
+    color: var(--primary-color-2);
+    margin: 24px 0;
+}
+
+.notaccount-list li {
+    padding: 10px 0;
+    color: #757575;
+}
+
+.notaccount-list li:hover {
+    color: white;
+}
+
+.highlighted {
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.5s; */
+    background-color: #3d3d3e;
+}

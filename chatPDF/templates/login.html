@@ -1,0 +1,31 @@
+{% extends 'base.html'%} {%block content%}
+<div class="row container-login">
+  <form method="POST" class="pt-3 pb-3 justify-content-center login-form ">
+    <a href="{{url_for('home')}}" class="login-close">
+      <i class="fas fa-times"></i> 
+    </a>
+    <div class="text-center">
+      <img class="mb-4" style="width: 200px; height: auto"
+        src="https://ctsv.phenikaa-uni.edu.vn/assets/logo_phenikaa.fbe85f61.png" />
+    </div>
+    <h1 class="text-center h4">ĐĂNG NHẬP TÀI KHOẢN</h1>
+    <div class="form-group">
+      <label for="email" class="pt-4">Email</label>
+      <input type="email" name="email" pattern=".+@st\.phenikaa-uni\.edu\.vn"
+        placeholder="VD: 21010588@st.phenikaa-uni.edu.vn" id="" class="form-control" required />
+      <label for="password" class="pt-4">Mật khẩu</label>
+      <input type="password" name="password" id="" class="form-control" required />
+    </div>
+    <input type="submit" value="Đăng nhập" class="btn btn-block mt-4 btn-primary" style="background-color: #31447a" />
+    <div class="float-right small">
+      <span class="text-secondary">Bạn chưa có tài khoản?</span>
+      <a href="{{url_for('sigup')}}" id="register-link" style="
+          color: var(--primary-color-2);
+          font-weight: 600;
+          cursor: pointer;
+          text-decoration: underline;
+        ">Đăng kí</a>
+    </div>
+  </form>
+</div>
+{%endblock%}

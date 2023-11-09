@@ -1,0 +1,197 @@
+{% extends 'base.html'%} {% block content %}
+
+<div class="d-flex user">
+    <div class="text-white admin-menu">
+      <ul class="admin-menu-list">
+        <li class="admin-item active">Quản lý File</li>
+        <li class="admin-item">Quản lý phản hồi</li>
+        <li class="admin-item">Quản lý tài khoản</li>
+        <li class="admin-item">ChatPDF</li>
+      </ul>
+      <a href="{{url_for('login')}}" class="btn home-btn-text"
+        >Đăng Nhập</a>
+    </div>
+    <div class="admin-content">
+        <div class="admin-list active">
+            <div class="scroll">
+                <table class="table-bordered admin-content-table">
+                    <thead>
+                        <tr>
+                          <th scope="col" style="width: 50px">#</th>
+                          <th scope="col" style="width: 150px">Thời gian</th>
+                          <th scope="col">File</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td contenteditable="true">Mark</td>
+                          <td contenteditable="true"><input type="file" name="pdf" accept=".pdf"></td>
+                        </tr>
+                      </tbody>
+                  </table>
+            </div>
+
+              <div class="admin-btn d-flex justify-content-end m-5">
+                <button class="btn ml-5 btn-add">Thêm</button>
+                <button class="btn ml-5 btn-close">Xóa</button>
+              </div>
+
+        </div>
+        <div class="admin-list">
+            <div class="scroll">
+                <table class="table-bordered admin-content-table">
+                    <thead>
+                        <tr>
+                          <th scope="col" style="width: 50px">#</th>
+                          <th scope="col" style="width: 300px">Email</th>
+                          <th scope="col" style="width: 150px">Thời gian</th>
+                          <th scope="col">Phản hồi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td contenteditable="true">Mark</td>
+                          <td contenteditable="true">Otto</td>
+                          <td contenteditable="true">Otto</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td contenteditable="true">Mark</td>
+                          <td contenteditable="true">Otto</td>
+                          <td contenteditable="true">Otto</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td contenteditable="true">Mark</td>
+                          <td contenteditable="true">Otto</td>
+                          <td contenteditable="true">Otto</td>
+                        </tr>
+                        
+                      </tbody>
+                  </table>
+            </div>
+
+              <div class="admin-btn d-flex justify-content-end m-5">
+                <button class="btn ml-5 btn-close">Xóa</button>
+              </div>
+
+        </div>
+        <div class="admin-list">
+            <div class="scroll">
+                <table class="table-bordered admin-content-table">
+                    <thead>
+                        <tr>
+                          <th scope="col" style="width: 50px">STT</th>
+                          <th scope="col" style="width: 300px">Tên tài khoản</th>
+                          <th scope="col">Email</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>Mark</td>
+                          <td>Otto</td>
+                        </tr>
+                       
+                      </tbody>
+                  </table>
+            </div>
+
+              <div class="admin-btn d-flex justify-content-end m-5">
+                <button class="btn ml-5 btn-add">Thêm</button>
+                <button class="btn ml-5 btn-close">Xóa</button>
+              </div>
+
+        </div>
+        
+        <div class="admin-list">
+            <div class="scroll" id="scrollable-content">
+                <div class="user-chat">
+                    <div class="chat-tk" style="display: flex; justify-content: flex-end;">
+                        <span>HK</span>
+                    </div>
+                    <div class="chat-item"> Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa
+    
+                    </div>
+                </div>
+                <div class="chat-chat">
+                    <div class="chat-AI">
+                        <span>
+                            <i class="fas fa-comment"></i>
+                        </span>
+                    </div>
+                    <div class="chat-item"> Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa
+    
+                    </div>
+                </div>
+                <div class="user-chat">
+                    <div class="chat-tk" style="display: flex; justify-content: flex-end;">
+                        <span>HK</span>
+                    </div>
+                    <div class="chat-item"> Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa
+    
+                    </div>
+                </div>
+                <div class="chat-chat">
+                    <div class="chat-AI">
+                        <span>
+                            <i class="fas fa-comment"></i>
+                        </span>
+                    </div>
+                    <div class="chat-item"> Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa
+    
+                    </div>
+                </div>
+                <div class="user-chat">
+                    <div class="chat-tk" style="display: flex; justify-content: flex-end;">
+                        <span>HK</span>
+                    </div>
+                    <div class="chat-item"> Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa
+    
+                    </div>
+                </div>
+                <div class="chat-chat">
+                    <div class="chat-AI">
+                        <span>
+                            <i class="fas fa-comment"></i>
+                        </span>
+                    </div>
+                    <div class="chat-item"> Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa Hoang Thi Khuyen Trương dai hoc phenikaa
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex chatPDF-message">
+                <textarea rows="1" placeholder="Send a message" class=""></textarea>
+                <button class="chatPDF-message-btn">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const $ = document.querySelector.bind(document);
+    const $$ = document.querySelectorAll.bind(document);
+
+    const adminItems = $$(".admin-item");
+    const adminLists = $$(".admin-list");
+    adminItems.forEach((item, index) => {
+      const adList = adminLists[index];
+      item.onclick = function () {
+        $(".admin-item.active").classList.remove("active");
+        $(".admin-list.active").classList.remove("active");
+
+        this.classList.add("active");
+        adList.classList.add("active");
+      };
+    });
+  </script>
+
+  <script>
+    var scrollableContent = document.getElementById('scrollable-content')
+    scrollableContent.scrollTop = scrollableContent.scrollHeight;
+  </script>
+
+{% endblock %}
