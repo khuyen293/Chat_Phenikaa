@@ -10,6 +10,8 @@ from langchain.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
+from langchain.storage.file_system import LocalFileStore
+from langchain.embeddings.cache import CacheBackedEmbeddings
 from flask import jsonify
 
 from dotenv import load_dotenv
@@ -47,8 +49,12 @@ def get_text_chunks(text):
     return chunks
 
 def get_vectorstore(text_chunks):
-    embeddings = OpenAIEmbeddings()
-    vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
+    fs = LocalFileStore("./chatPDF/cache/")
+    underlying_embeddings = OpenAIEmbeddings()
+    cached_embedder = CacheBackedEmbeddings.from_bytes_store(
+    underlying_embeddings, fs, namespace=underlying_embeddings.model
+    )
+    vectorstore = FAISS.from_texts(texts=text_chunks, embedding= cached_embedder)
     return vectorstore
 
 prompt = """You are an AI assistant created by Phenikaa University to answer questions about the university and have friendly conversations with students. 
