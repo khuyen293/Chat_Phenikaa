@@ -14,6 +14,10 @@ from langchain.storage.file_system import LocalFileStore
 from langchain.embeddings.cache import CacheBackedEmbeddings
 from flask import jsonify
 
+from underthesea import word_tokenize
+from selenium import webdriver
+from bs4 import BeautifulSoup
+
 from dotenv import load_dotenv
 import os
 
@@ -35,8 +39,42 @@ def get_pdf_text(pdf):
     pdf_reader = PdfReader(pdf)
     for page in pdf_reader.pages:
         text += page.extract_text()
+    # return clean_text(text)
     return text
 
+def get_web_text(url):
+    text = ""
+    driver = webdriver.Chrome()
+    driver.get(url)
+    html_content = driver.page_source
+    driver.quit()
+    soup = BeautifulSoup(html_content, 'html.parser')
+    target_div = soup.find('div', {'class': "news-item-content"})
+    if target_div is not None:
+        elements = target_div.find_all(['h1', 'h2', 'h3', 'h4', 'p', 'ul'])
+        for element in elements:
+            text += element.get_text() + "\n"
+    else:
+        print("Không tìm thấy nội dung.")
+    return text
+
+def get_webs_text(urls):
+    all_texts = ""
+    for url in urls:
+        result = get_web_text(url)
+        all_texts += result
+    return all_texts
+
+# Lấy từ điển stop word
+with open("./chatPDF/vietnamese-stopwords.txt", 'r', encoding='utf-8') as file:
+    stopwords_vi = file.readlines()  
+stopwords_vi = [line.strip() for line in stopwords_vi]  
+
+# Clean stopwords
+def clean_text(text):
+    tokens = word_tokenize(text)
+    filtered_tokens = [word for word in tokens if word not in stopwords_vi]
+    return ' '.join(filtered_tokens)
 
 def get_text_chunks(text):
     text_splitter = CharacterTextSplitter(
@@ -60,7 +98,6 @@ def get_vectorstore(text_chunks):
 prompt = """You are an AI assistant created by Phenikaa University to answer questions about the university and have friendly conversations with students. 
 Your goal is to be helpful, exaclly. 
 If you can't find the information, say you don't know. Don't try to make up answers.
-Please answer in maximum 100 words.
 Please using Vietnamese"""
 
 def get_conversation_chain(vectorstore):
@@ -73,8 +110,8 @@ def get_conversation_chain(vectorstore):
     )
     return conversation_chain
 
-pdf = get_pdfs_text(["./chatPDF/pdf/Thoi khoa bieu Tuan SHCD K15- Ngày 15.9.2021.pdf","./chatPDF/pdf/Thông báo về việc xin miễn giảm và nộp học phí .pdf", "./chatPDF/pdf/Tb_ra_vao_cong.pdf", "./chatPDF/pdf/ctdtict1-1.pdf"])
-chunks = get_text_chunks(pdf)
+text = get_pdfs_text(["./chatPDF/pdf/Thoi khoa bieu Tuan SHCD K15- Ngày 15.9.2021.pdf","./chatPDF/pdf/Thông báo về việc xin miễn giảm và nộp học phí .pdf", "./chatPDF/pdf/Tb_ra_vao_cong.pdf", "./chatPDF/pdf/ctdtict1-1.pdf"]) + get_webs_text(["https://phenikaa-uni.edu.vn/vi/events/view/su-kien/olympic-vat-ly-sinh-vien-cap-truong-va-tham-du-olympic-vat-ly-sinh-vien-toan-quoc-lan-thu-xxv-nam-2023", "https://phenikaa-uni.edu.vn/vi/events/view/su-kien/hoi-nghi-nu-khoa-hoc-toan-quoc-lan-thu-iii"])
+chunks = get_text_chunks(text)
 vec = get_vectorstore(chunks)
 
     
