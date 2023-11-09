@@ -15,6 +15,10 @@
     list-style: none;
 }
 
+body{
+    background: #111222;
+}
+
 html{
     box-sizing: border-box;
     font-family: "Poppins",sans-serif;

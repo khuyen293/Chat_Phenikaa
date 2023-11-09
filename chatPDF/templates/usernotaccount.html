@@ -16,9 +16,15 @@
       {% for conversation in conversations %}
       <div class="user-chat">
         <div class="chat-tk" style="display: flex; justify-content: flex-end;">
-          <span class="username">HK</span>
+          <span class="username">
+            <i class="fa-solid fa-user"></i>
+          </span>
         </div>
-        <div class="chat-item">{{ conversation.user_chat }}</div>
+        <div class="chat-item chat-item-right">
+          <p class="chat-item-message">
+            {{ conversation.user_chat }}
+          </p>
+        </div>
       </div>
 
       <div class="chat-chat">
@@ -27,7 +33,11 @@
             <i class="fas fa-comment"></i>
           </span>
         </div>
-        <div class="chat-item">{{ conversation.bot_chat }}</div>
+        <div class="chat-item chat-item-left">
+          <p class="chat-item-messageAI">
+            {{ conversation.bot_chat }}
+          </p>
+        </div>
       </div>
 
       {% endfor %}
@@ -61,6 +71,7 @@
 
   sendMessageButton.addEventListener('click', function () {
     const user_chat = messageInput.value;
+    if (user_chat != ""){
     const bot_chat = 'chat';
     messageInput.value = '';
 
@@ -68,9 +79,15 @@
     userChatDiv.className = 'user-chat';
     userChatDiv.innerHTML = `
         <div class="chat-tk" style="display: flex; justify-content: flex-end;" id="scrollable-content">
-          <span class="username">HK</span>
+          <span class="username">
+            <i class="fa-solid fa-user"></i>
+            </span>
         </div>
-        <div class="chat-item">${user_chat}</div>
+        <div class="chat-item chat-item-right">
+                <p class="chat-item-message">
+                  ${user_chat}
+                <p>
+              </div>
       `;
     conversationContainer.appendChild(userChatDiv);
 
@@ -82,7 +99,12 @@
             <i class="fas fa-comment"></i>
           </span>
         </div>
-        <div class="chat-item"><i class="fa-solid fa-ellipsis fa-spin fa-spin-reverse chat-item-icon"></i></div>
+        
+        <div class="chat-item chat-item-left">
+                <p class="chat-item-messageAI">
+                  <i class="fa-solid fa-spinner fa-spin"></i>
+                <p>
+        </div>
       `;
     conversationContainer.appendChild(chatChatDiv);
 
@@ -101,10 +123,15 @@
                 <i class="fas fa-comment"></i>
               </span>
             </div>
-            <div class="chat-item">${data.bot_chat}</div>
+            <div class="chat-item chat-item-left">
+                <p class="chat-item-messageAI">
+                  ${data.bot_chat}
+                <p>
+              </div>
           `;
         conversationContainer.appendChild(chatChatDiv);   
       });
+    }
   });
 </script>
 

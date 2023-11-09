@@ -1,6 +1,7 @@
 .admin-menu{
     width: 20%;
-    background:#111222;
+    background: #090d17;
+    border-right: 2px solid #111222;
     height: 100vh;
     cursor: pointer;
     display: flex;
@@ -10,8 +11,7 @@
 
 .admin-menu-list li{
     padding: 16px;
-    border-bottom: 1px solid #545456;
-
+    border-bottom: 2px solid #111222;
 }
 
 .admin-menu-list li:hover{

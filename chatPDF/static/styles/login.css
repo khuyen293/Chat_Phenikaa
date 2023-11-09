@@ -12,10 +12,10 @@
 
 .login-form{
     background-color: #fff;
-    width: 420px;
+    width: 370px;
     position: relative;
-    animation: LoginFadeIn ease 1.5s;
-    box-shadow: 0 5px 10px rgba(198, 196, 196, 0.5);
+    animation: LoginFadeIn ease 1.2s;
+    box-shadow: 0 4px 10px rgba(198, 196, 196, 0.5);
     border-radius: 5px;
     overflow: hidden;
     padding: 0 20px;
@@ -49,3 +49,7 @@
     background: var(--primary-color-2);
     border-radius: 5px;
 }
+/* 
+.form-group input{
+    padding: 6px 0;
+} */

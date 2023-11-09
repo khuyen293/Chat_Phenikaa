@@ -163,12 +163,12 @@
 .user-account-box-img {
     font-weight: 600;
     color: white;
-
 }
 
 .user-account-box-img span {
-    padding: 8px;
+    padding: 8px 10px;
     background-color: var(--primary-color-2);
+    border-radius: 5px;
 }
 
 .account-btn {
@@ -205,6 +205,7 @@
 .user-chatPDF-conversation {
     position: sticky;
     height: 85vh;
+    margin-top: 32px;
 }
 
 .scroll {
@@ -225,22 +226,17 @@
 
 .user-chat,
 .chat-chat {
-    padding: 12px 150px;
+    padding: 10px 150px;
 }
 
 .chat-tk span {
-    /* background-color: var(--primary-color-2);
-    padding: 7px 10px;
-    color: white;
-    font-weight: 600;
-    border-radius: 31% 69% 50% 50% / 35% 29% 71% 65%; */
     color: var(--primary-color-2);
     font-weight: 600;
     padding: 7px 10px;
     border-radius: 10px;
-    background: linear-gradient(145deg, #cacaca, #f0f0f0);
-    box-shadow:  5px 5px 0px #5a5a5a,
-             -5px -5px 0px #ffffff;
+    background: #e0e0e0;
+    box-shadow:  5px 5px 1px #868686,
+                -5px -5px 1px #ffffff;
 }
 
 .chat-AI{
@@ -248,17 +244,13 @@
 }
 
 .chat-AI span {
-    /* background-color: var(--primary-color);
-    color: white;
-    padding: 8px 10px;
-    border-radius: 66% 34% 51% 49% / 17% 55% 45% 83% ; */
     color: var(--primary-color);
     font-weight: 600;
     padding: 7px 10px;
     border-radius: 10px;
     background: #e0e0e0;
-    box-shadow: inset 5px 5px 0px #a8a8a8,
-            inset -5px -5px 0px #ffffff;
+    box-shadow:  5px 5px 1px #868686,
+                -5px -5px 1px #ffffff;
 }
 
 .chat-item {
@@ -279,25 +271,29 @@
 }
 
 .chat-item-message{
-    background-color: #212121;
+    background-color: var(--primary-color);
     color: white;
-    border-radius: 25px;
     padding: 5px 8px;
-    /* font-weight: 500; */
-    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+    box-shadow: inset 1px 2px 5px rgb(2, 7, 51);
     transition: 300ms ease-in-out;
     border: none;
     outline: none;
     margin: 10px 35px 10px 85px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 
 }
 
 .chat-item-messageAI{
-    background-color: #333;
+    background-color: #303030;
     color: white;
-    border-radius: 25px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
     padding: 5px 8px;
-    /* font-weight: 500; */
     box-shadow: inset 2px 5px 10px rgba(0,0,0,0.3);
     transition: 300ms ease-in-out;
     border: none;
@@ -348,7 +344,8 @@
 /* Tài khoản khi không đăng nhập */
 
 .notaccount {
-    background-color: #111222;
+    background: #090d17;
+    border-right: 2px solid #111222;
     padding: 16px;
     bottom: 0;
     float: inline-end;

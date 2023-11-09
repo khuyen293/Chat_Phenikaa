@@ -1,6 +1,6 @@
 {% extends 'base.html'%} {% block content %}
 
-<div class="d-flex user" style="background-color: #111222;">
+<div class="d-flex user">
   <div class="text-white user-list-menu">
     <div class="user-new">
       <a href="" id="addTopicButton">
@@ -24,7 +24,7 @@
               <a href="">
                 <div class="topic-item-name">
                   <i class="fa-regular fa-message"></i>
-                  <span class="title">{{ topic.title }}</span>
+                  <span class="title" id="title">{{ topic.title }}</span>
                 </div>
               </a>
               <div class="topic-item-icon">
@@ -262,71 +262,70 @@
   const sendMessageButton = document.getElementById("sendMessageButton");
   sendMessageButton.addEventListener("click", function () {
     const user_chat = messageInput.value;
-    const bot_chat = "chat chat";
-    const topic_id = "{{topic.id}}";
-    messageInput.value = "";
+    if (user_chat != ""){
+      const bot_chat = "chat chat";
+      const topic_id = "{{topic.id}}";
 
-    const userChatDiv = document.createElement("div");
-    userChatDiv.className = "user-chat";
-    userChatDiv.innerHTML = `
-            <div class="chat-tk" style="display: flex; justify-content: flex-end;" id="scrollable-content">
-                <span class="username">{{ new_name }}</span>
-            </div>
-            <div class="chat-item chat-item-right">
-              <p class="chat-item-message">
-                ${user_chat}
-              <p>
-
-            </div>
-        `;
-    const conversationContainer = document.querySelector(
-      ".user-chatPDF-conversation"
-    );
-    conversationContainer.appendChild(userChatDiv);
-
-    const chatChatDiv = document.createElement("div");
-    chatChatDiv.className = "chat-chat";
-    chatChatDiv.innerHTML = `
-            <div class="chat-AI">
-                <span>
-                    <i class="fas fa-comment"></i>
-                </span>
-            </div>
-            <div class="chat-item chat-item-left">
-              <p class="chat-item-messageAI">
-                <i class="fa-solid fa-spinner fa-spin"></i>
-              <p>
+      messageInput.value = "";
+      const userChatDiv = document.createElement("div");
+      userChatDiv.className = "user-chat";
+      userChatDiv.innerHTML = `
+              <div class="chat-tk" style="display: flex; justify-content: flex-end;" id="scrollable-content">
+                  <span class="username">{{ new_name }}</span>
               </div>
-    `;
-    conversationContainer.appendChild(chatChatDiv);
-
-    fetch("/add_conversation", {
-      method: "POST",
-      body: JSON.stringify({
-        topic_id: topic_id,
-        user_chat: user_chat,
-        bot_chat: bot_chat,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then(res => res.json())
-    .then((data) => {
-     chatChatDiv.innerHTML = `
-            <div class="chat-AI">
-                <span>
-                    <i class="fas fa-comment"></i>
-                </span>
-            </div>
-            <div class="chat-item chat-item-left">
-              <p class="chat-item-messageAI">
-                ${data.bot_chat}
-              <p>
-            </div>
-        `;
-      conversationContainer.appendChild(chatChatDiv);
-    });
+              <div class="chat-item chat-item-right">
+                <p class="chat-item-message">
+                  ${user_chat}
+                <p>
+              </div>
+          `;
+      const conversationContainer = document.querySelector(
+        ".user-chatPDF-conversation"
+      );
+      conversationContainer.appendChild(userChatDiv);
+      const chatChatDiv = document.createElement("div");
+      chatChatDiv.className = "chat-chat";
+      chatChatDiv.innerHTML = `
+              <div class="chat-AI">
+                  <span>
+                      <i class="fas fa-comment"></i>
+                  </span>
+              </div>
+              <div class="chat-item chat-item-left">
+                <p class="chat-item-messageAI">
+                  <i class="fa-solid fa-spinner fa-spin"></i>
+                <p>
+                </div>
+      `;
+      conversationContainer.appendChild(chatChatDiv); 
+      fetch("/add_conversation", {
+        method: "POST",
+        body: JSON.stringify({
+          topic_id: topic_id,
+          user_chat: user_chat,
+          bot_chat: bot_chat,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(res => res.json())
+      .then((data) => {
+      chatChatDiv.innerHTML = `
+              <div class="chat-AI">
+                  <span>
+                      <i class="fas fa-comment"></i>
+                  </span>
+              </div>
+              <div class="chat-item chat-item-left">
+                <p class="chat-item-messageAI">
+                  ${data.bot_chat}
+                <p>
+              </div>
+          `;
+        conversationContainer.appendChild(chatChatDiv);
+       });
+      }
   });
 </script>
 
