@@ -285,6 +285,7 @@
       conversationContainer.appendChild(userChatDiv);
       const chatChatDiv = document.createElement("div");
       chatChatDiv.className = "chat-chat";
+      conversationContainer.appendChild(chatChatDiv); 
       chatChatDiv.innerHTML = `
               <div class="chat-AI">
                   <span>
@@ -297,7 +298,6 @@
                 <p>
                 </div>
       `;
-      conversationContainer.appendChild(chatChatDiv); 
       fetch("/add_conversation", {
         method: "POST",
         body: JSON.stringify({
@@ -310,23 +310,30 @@
         },
       })
       .then(res => res.json())
-      .then((data) => {
-      chatChatDiv.innerHTML = `
-              <div class="chat-AI">
-                  <span>
-                      <i class="fas fa-comment"></i>
-                  </span>
-              </div>
-              <div class="chat-item chat-item-left">
-                <p class="chat-item-messageAI">
-                  ${data.bot_chat}
-                <p>
-              </div>
-          `;
-        conversationContainer.appendChild(chatChatDiv);
-       });
+        .then((data) => {
+            showResponse(data.bot_chat, chatChatDiv);
+        });
       }
   });
+
+  function showResponse(response, chatChatDiv) {
+    const words = response.split(' ');
+    let index = 0;
+    // Tìm phần tử p trong .chat-item-left
+    const chatItemMessageAI = chatChatDiv.querySelector('.chat-item-left .chat-item-messageAI');
+    function displayWord() {
+        if (index === 0) {
+            chatItemMessageAI.innerHTML = words[index]; // Hiển thị từ đầu tiên
+        } else {
+            chatItemMessageAI.innerHTML += ' ' + words[index]; // Thêm từng từ vào cuối
+        }
+        index++;
+        if (index < words.length) {
+            setTimeout(displayWord, 150); // Thời gian giữa mỗi từ
+        }
+    }
+    displayWord();
+}
 </script>
 
 <script>

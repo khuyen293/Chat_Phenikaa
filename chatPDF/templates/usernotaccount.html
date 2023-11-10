@@ -93,6 +93,7 @@
 
     const chatChatDiv = document.createElement('div');
     chatChatDiv.className = 'chat-chat';
+    conversationContainer.appendChild(chatChatDiv);
     chatChatDiv.innerHTML = `
         <div class="chat-AI">
           <span>
@@ -106,7 +107,6 @@
                 <p>
         </div>
       `;
-    conversationContainer.appendChild(chatChatDiv);
 
     fetch('/add_conversation', {
       method: 'POST',
@@ -115,24 +115,31 @@
         'Content-Type': 'application/json'
       }
     })
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
-        chatChatDiv.innerHTML = `
-            <div class="chat-AI">
-              <span>
-                <i class="fas fa-comment"></i>
-              </span>
-            </div>
-            <div class="chat-item chat-item-left">
-                <p class="chat-item-messageAI">
-                  ${data.bot_chat}
-                <p>
-              </div>
-          `;
-        conversationContainer.appendChild(chatChatDiv);   
+        showResponse(data.bot_chat, chatChatDiv);
+           
       });
     }
   });
+
+  function showResponse(response, chatchatDiv){
+    const words = response.split(' ');
+    let index = 0;
+    const chatItemMessageAI = chatchatDiv.querySelector('.chat-item-left .chat-item-messageAI');
+    function displayWord(){
+      if (index === 0){
+        chatItemMessageAI.innerHTML = words[index];
+      }else{
+        chatItemMessageAI.innerHTML += ' ' + words[index];
+      }
+      index++;
+      if(index < words.length){
+        setTimeout(displayWord, 150)
+      }
+    }
+    displayWord();
+  }
 </script>
 
 <script>
