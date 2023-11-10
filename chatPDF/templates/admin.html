@@ -158,6 +158,11 @@
   </script>
 
 <script>
+  // scroll
+  const scrollableContent = document.getElementById("scrollable-content");
+  function scrollBottom() {
+    scrollableContent.scrollTop = scrollableContent.scrollHeight;
+  }
   // Gửi tin nhắn
   const messageInput = document.getElementById('messageInput');
   const sendMessageButton = document.getElementById('sendMessageButton');
@@ -209,36 +214,55 @@
         'Content-Type': 'application/json'
       }
     })
-      .then(res => res.json())
-      .then(data => {
-        showResponse(data.bot_chat, chatChatDiv);
-           
-      });
+    .then(res => res.json())
+        .then((data) => {
+            showResponse(data.bot_chat, chatChatDiv);
+        });
     }
+    scrollBottom();
   });
 
-  function showResponse(response, chatchatDiv){
-    const words = response.split(' ');
+  function showResponse(response, chatChatDiv) {
+    const words = response.split(" ");
     let index = 0;
-    const chatItemMessageAI = chatchatDiv.querySelector('.chat-item-left .chat-item-messageAI');
-    function displayWord(){
-      if (index === 0){
+    const chatItemMessageAI = chatChatDiv.querySelector(
+      ".chat-item-left .chat-item-messageAI"
+    );
+    let displayingWords = true;
+
+    function clickHandler() {
+      console.log("Click event triggered");
+      displayingWords = !displayingWords;
+      if (!displayingWords) {
+        chatItemMessageAI.innerHTML = response;
+        scrollBottom();
+        chatItemMessageAI.removeEventListener("click", clickHandler);
+      }
+    }
+    // Thêm sự kiện click
+    chatItemMessageAI.addEventListener("click", clickHandler);
+
+    function displayWord() {
+      if (index === 0) {
         chatItemMessageAI.innerHTML = words[index];
-      }else{
-        chatItemMessageAI.innerHTML += ' ' + words[index];
+      } else {
+        chatItemMessageAI.innerHTML += " " + words[index];
       }
       index++;
-      if(index < words.length){
-        setTimeout(displayWord, 150)
+
+      // Nếu đang hiển thị từng từ và chưa hiển thị hết từ, tiếp tục hiển thị từng từ
+      if (index < words.length && displayingWords) {
+        setTimeout(displayWord, 150);
+      } else {
+        // Nếu đã hiển thị hết từ, xóa sự kiện click và hiển thị toàn bộ
+        chatItemMessageAI.removeEventListener("click", clickHandler);
+        chatItemMessageAI.innerHTML = response;
       }
+      scrollBottom();
     }
     displayWord();
   }
+  scrollBottom();
 </script>
-
-  <script>
-    var scrollableContent = document.getElementById('scrollable-content')
-    scrollableContent.scrollTop = scrollableContent.scrollHeight;
-  </script>
 
 {% endblock %}

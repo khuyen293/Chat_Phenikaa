@@ -79,26 +79,25 @@
       {% for conversation in topic.conversations %}
 
       <div class="user-chat">
-        <div class="chat-tk chat-tk-radius" style="display: flex; justify-content: flex-end">
+        <div
+          class="chat-tk chat-tk-radius"
+          style="display: flex; justify-content: flex-end"
+        >
           <span class="username">{{new_name}}</span>
         </div>
-        <div class="chat-item chat-item-right"> 
-          <p class="chat-item-message">
-            {{ conversation.user_chat }}         
-          </p>       
+        <div class="chat-item chat-item-right">
+          <p class="chat-item-message">{{ conversation.user_chat }}</p>
         </div>
       </div>
 
       <div class="chat-chat">
-        <div class="chat-AI ">
+        <div class="chat-AI">
           <span>
             <i class="fas fa-comment"></i>
           </span>
         </div>
         <div class="chat-item chat-item-left">
-          <p class="chat-item-messageAI">
-            {{ conversation.bot_chat }}
-          </p>
+          <p class="chat-item-messageAI">{{ conversation.bot_chat }}</p>
         </div>
       </div>
 
@@ -118,6 +117,8 @@
     </div>
   </div>
 </div>
+
+<!-- Click topic -->
 <script>
   // click topic
   const topicDivs = document.querySelectorAll(".topic");
@@ -130,6 +131,8 @@
     });
   });
 </script>
+
+<!-- Add topic -->
 <script>
   // add topic
   document
@@ -255,14 +258,19 @@
     });
   });
 </script>
-
+<!-- Gửi tin nhắn và nhận câu trả lời -->
 <script>
+  const scrollableContent = document.getElementById("scrollable-content");
+  function scrollBottom() {
+    scrollableContent.scrollTop = scrollableContent.scrollHeight;
+  }
   // gửi tin nhắn
   const messageInput = document.getElementById("messageInput");
   const sendMessageButton = document.getElementById("sendMessageButton");
+
   sendMessageButton.addEventListener("click", function () {
     const user_chat = messageInput.value;
-    if (user_chat != ""){
+    if (user_chat != "") {
       const bot_chat = "chat chat";
       const topic_id = "{{topic.id}}";
 
@@ -270,34 +278,37 @@
       const userChatDiv = document.createElement("div");
       userChatDiv.className = "user-chat";
       userChatDiv.innerHTML = `
-              <div class="chat-tk" style="display: flex; justify-content: flex-end;" id="scrollable-content">
-                  <span class="username">{{ new_name }}</span>
-              </div>
-              <div class="chat-item chat-item-right">
+            <div class="chat-tk chat-tk-radius" style="display: flex; justify-content: flex-end">
+                <span class="username">{{ new_name }}</span>
+            </div>
+            <div class="chat-item chat-item-right">
                 <p class="chat-item-message">
-                  ${user_chat}
-                <p>
-              </div>
-          `;
+                    ${user_chat}
+                </p>
+            </div>
+        `;
       const conversationContainer = document.querySelector(
         ".user-chatPDF-conversation"
       );
       conversationContainer.appendChild(userChatDiv);
+
       const chatChatDiv = document.createElement("div");
       chatChatDiv.className = "chat-chat";
-      conversationContainer.appendChild(chatChatDiv); 
+      conversationContainer.appendChild(chatChatDiv);
+
+      // Thêm phần loading ban đầu
       chatChatDiv.innerHTML = `
-              <div class="chat-AI">
-                  <span>
-                      <i class="fas fa-comment"></i>
-                  </span>
-              </div>
-              <div class="chat-item chat-item-left">
+            <div class="chat-AI">
+                <span>
+                    <i class="fas fa-comment"></i>
+                </span>
+            </div>
+            <div class="chat-item chat-item-left">
                 <p class="chat-item-messageAI">
-                  <i class="fa-solid fa-spinner fa-spin"></i>
-                <p>
-                </div>
-      `;
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                </p>
+            </div>`;
+
       fetch("/add_conversation", {
         method: "POST",
         body: JSON.stringify({
@@ -309,35 +320,54 @@
           "Content-Type": "application/json",
         },
       })
-      .then(res => res.json())
+        .then((res) => res.json())
         .then((data) => {
-            showResponse(data.bot_chat, chatChatDiv);
+          showResponse(data.bot_chat, chatChatDiv);
         });
-      }
+    }
+    scrollBottom();
   });
 
   function showResponse(response, chatChatDiv) {
-    const words = response.split(' ');
+    const words = response.split(" ");
     let index = 0;
-    // Tìm phần tử p trong .chat-item-left
-    const chatItemMessageAI = chatChatDiv.querySelector('.chat-item-left .chat-item-messageAI');
+    const chatItemMessageAI = chatChatDiv.querySelector(
+      ".chat-item-left .chat-item-messageAI"
+    );
+    let displayingWords = true;
+
+    function clickHandler() {
+      console.log("Click event triggered");
+      displayingWords = !displayingWords;
+      if (!displayingWords) {
+        chatItemMessageAI.innerHTML = response;
+        scrollBottom();
+        chatItemMessageAI.removeEventListener("click", clickHandler);
+      }
+    }
+    // Thêm sự kiện click
+    chatItemMessageAI.addEventListener("click", clickHandler);
+
     function displayWord() {
-        if (index === 0) {
-            chatItemMessageAI.innerHTML = words[index]; // Hiển thị từ đầu tiên
-        } else {
-            chatItemMessageAI.innerHTML += ' ' + words[index]; // Thêm từng từ vào cuối
-        }
-        index++;
-        if (index < words.length) {
-            setTimeout(displayWord, 150); // Thời gian giữa mỗi từ
-        }
+      if (index === 0) {
+        chatItemMessageAI.innerHTML = words[index];
+      } else {
+        chatItemMessageAI.innerHTML += " " + words[index];
+      }
+      index++;
+
+      // Nếu đang hiển thị từng từ và chưa hiển thị hết từ, tiếp tục hiển thị từng từ
+      if (index < words.length && displayingWords) {
+        setTimeout(displayWord, 150);
+      } else {
+        // Nếu đã hiển thị hết từ, xóa sự kiện click và hiển thị toàn bộ
+        chatItemMessageAI.removeEventListener("click", clickHandler);
+        chatItemMessageAI.innerHTML = response;
+      }
+      scrollBottom();
     }
     displayWord();
-}
-</script>
-
-<script>
-  var scrollableContent = document.getElementById("scrollable-content");
-  scrollableContent.scrollTop = scrollableContent.scrollHeight;
+  }
+  scrollBottom();
 </script>
 {% endblock %}
