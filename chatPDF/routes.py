@@ -3,9 +3,41 @@ from flask import render_template, redirect, url_for, request, flash
 from chatPDF.models import User, Topic, Conversation
 from datetime import datetime, timedelta
 from flask import jsonify
+import pickle
+# from chatPDF.ai import *
 
-from chatPDF.ai import *
+from langchain.chat_models import ChatOpenAI
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationalRetrievalChain
+
 import os  
+from dotenv import load_dotenv
+# Load .env file
+load_dotenv()
+# Lấy giá trị của biến môi trường từ tệp .env
+openai_api_key = os.getenv('OPENAI_API_KEY')
+
+prompt = """You are an AI assistant created by Phenikaa University to answer questions about the university and have friendly conversations with students. 
+Your goal is to be helpful, exactly. 
+If you can't find the information, say you don't know. Don't try to make up answers.
+Please using Vietnamese"""
+
+def get_conversation_chain(vectorstore):
+    llm = ChatOpenAI(temperature= 0.5, model_name= "gpt-3.5-turbo-16k")
+    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+    conversation_chain = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=vectorstore.as_retriever(),
+        memory=memory,
+    )
+    return conversation_chain
+
+def load_vectorstore(filename):
+    with open(filename, 'rb') as file:
+        vectorstore = pickle.load(file)
+    return vectorstore
+
+vec = load_vectorstore("./chatPDF/cache/vectorstore.pkl")
 
 def get_current_date():
     return {'current_date': datetime.today().strftime('%d')}
