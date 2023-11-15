@@ -112,15 +112,18 @@ def load_vectorstore(filename):
         vectorstore = pickle.load(file)
     return vectorstore
 
+pdf_folder = '../chatPDF/pdf'
+pdf_files = [os.path.join(pdf_folder, filename) for filename in os.listdir(pdf_folder) if filename.endswith('.pdf')]
+
 def get_data():
     web = get_webs_text(["https://phenikaa-uni.edu.vn/vi/events/view/su-kien/phenikaa-university-faculty-of-business-and-economics-conference-pubec-2023", "https://phenikaa-uni.edu.vn/vi/events/view/su-kien/hoi-nghi-nu-khoa-hoc-toan-quoc-lan-thu-iii"])
     chunkwebs = get_text_chunks(web)
     vecweb = get_vectorstoreweb(chunkwebs)
     save_vectorstore(vecweb, './cache/web/vectorstorweb.pkl')
-    print(chunkwebs)
+    # print(chunkwebs)
 
-    text = get_pdfs_text(["../chatPDF/pdf/Thoi khoa bieu Tuan SHCD K15- Ngày 15.9.2021.pdf","../chatPDF/pdf/Thông báo về việc xin miễn giảm và nộp học phí .pdf", "../chatPDF/pdf/Tb_ra_vao_cong.pdf", "../chatPDF/pdf/ctdtict1-1.pdf"]) + get_webs_text(["https://phenikaa-uni.edu.vn/vi/events/view/su-kien/phenikaa-university-faculty-of-business-and-economics-conference-pubec-2023", "https://phenikaa-uni.edu.vn/vi/events/view/su-kien/hoi-nghi-nu-khoa-hoc-toan-quoc-lan-thu-iii"])
-    chunks = get_text_chunks(text)
+    pdf = get_pdfs_text(pdf_files) 
+    chunks = get_text_chunks(pdf) + chunkwebs
     vec = get_vectorstore(chunks)
     save_vectorstore(vec, './cache/all/vectorstore.pkl')
     
