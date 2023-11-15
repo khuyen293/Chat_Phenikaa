@@ -1,10 +1,9 @@
 from chatPDF import app, db, bcrypt 
 from flask import render_template, redirect, url_for, request, flash
-from chatPDF.models import User, Topic, Conversation
+from chatPDF.models import User, Topic, Conversation, Pdf, Feedback
 from datetime import datetime, timedelta
 from flask import jsonify
 import pickle
-# from chatPDF.ai import *
 
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
@@ -37,10 +36,17 @@ def load_vectorstore(filename):
         vectorstore = pickle.load(file)
     return vectorstore
 
-vec = load_vectorstore("./chatPDF/cache/vectorstore.pkl")
+vec = load_vectorstore("./chatPDF/cache/all/vectorstore.pkl")
+vecweb = load_vectorstore("./chatPDF/cache/web/vectorstorweb.pkl")
+
+
+
+@app.template_filter('add_hours')
+def add_hours(dt):
+    return dt + timedelta(hours=7)
 
 def get_current_date():
-    return {'current_date': datetime.today().strftime('%d')}
+    return {'current_date': datetime.today().strftime('%Y-%m-%d %H:%M:%S')}
 
 app.context_processor(get_current_date) 
 
@@ -74,9 +80,9 @@ def login():
                 topic = Topic(user_id = user.id)
                 db.session.add(topic)
                 db.session.commit()
-            return redirect(url_for('admin', user=user.id)) if user.role == 'admin' else redirect(url_for('baseuser', user=user.id, topic = user.topics[-1].id))
+            return redirect(url_for('admin', user=user.id)) if user.role == 'admin' else redirect(url_for('baseuser', user=user.id))
         else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
+            flash('Đăng nhập không thành cồng, vui lòng kiểm tra lại tài khoản hoặc mật khẩu', 'danger')
     return render_template('login.html')
     
 @app.route('/sigup', methods=["GET", "POST"])
@@ -88,15 +94,15 @@ def sigup():
         confirm_password = request.form.get('confirm_password')
         user = User.query.filter_by(email=email).first()
         if user:
-            flash('Account already exists', 'warning')
+            flash('Tài khoản đã tồn tại', 'warning')
         elif password != confirm_password:
-            flash('Password does not match', 'warning')
+            flash('Mật khẩu không hợp lệ', 'warning')
         else:
             hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
             user = User(username=username, email=email, password=hashed_password)
             db.session.add(user)
             db.session.commit()
-            flash('Your account has been created! You are now able to log in', 'success')
+            flash('Bạn đã tạo tài khoản thành công! Bạn có thể đăng nhập bây giờ', 'success')
             return redirect(url_for('login'))
     return render_template('sigup.html')
 
@@ -115,7 +121,27 @@ def usernotaccount():
 
 @app.route('/admin')
 def admin():
-    return render_template('admin.html')
+    users = User.query.filter_by(role='user').all()
+    user_id = request.args.get('user')
+    pdfs = Pdf.query.filter_by(user_id= user_id).all()
+    topic = Topic.query.filter_by(user_id = user_id).first()
+
+    #feedback
+    user_emails = []
+    user_chats = []
+    bot_chats = []
+    feedbacks = Feedback.query.all();
+    for feedback in feedbacks:
+        user_email = User.query.filter_by(id=feedback.user_id).first().email
+        user_chat = Conversation.query.filter_by(id=feedback.conversation_id).first().user_chat
+        bot_chat = Conversation.query.filter_by(id=feedback.conversation_id).first().bot_chat
+        # user_emails.append(user_email)
+        # user_chats.append(user_chat)
+        # bot_chats.append(bot_chat)
+        feedback.user_email = user_email
+        feedback.user_chat = user_chat
+        feedback.bot_chat = bot_chat
+    return render_template('admin.html', users = users, topic = topic, pdfs = pdfs, user_id = user_id, user_emails = user_emails, user_chats = user_chats, bot_chats = bot_chats, feedbacks = feedbacks)
 
 @app.route('/add_topic', methods=['POST'])
 def add_topic():
@@ -125,8 +151,9 @@ def add_topic():
         new_topic = Topic(user_id=user_id)
         db.session.add(new_topic)
         db.session.commit()
+        return jsonify({'nofitication': 'Thêm topic thành công'})
     else:
-        return jsonify({'error': 'Dữ liệu ngu không hợp lệ'}), 400
+        return jsonify({'error': 'Dữ liệu không hợp lệ'}), 400
 
 @app.route('/rename_topic', methods=['POST'])
 def rename_topic():
@@ -147,8 +174,11 @@ def delete_topic():
     data = request.get_json()
     if 'topic_id' in data:
         topic_id = data['topic_id']
+        db.session.query(Conversation).filter_by(topic_id=topic_id).delete()
         db.session.query(Topic).filter_by(id=topic_id).delete()
         db.session.commit()
+        last_topic_id = Topic.query.order_by(Topic.id.desc()).first().id
+        return jsonify({'last_topic_id': last_topic_id})
     else:
         return jsonify({'error': 'Dữ liệu không hợp lệ'}), 400
 
@@ -165,5 +195,85 @@ def add_conversation():
         return jsonify({'user_chat': user_chat, 'bot_chat': bot_chat["answer"]})
     else:
         user_chat = data['user_chat']
-        bot_chat = get_conversation_chain(vec)({"question": (prompt + user_chat)})
+        bot_chat = get_conversation_chain(vecweb)({"question": (prompt + user_chat)})
         return jsonify({'user_chat': user_chat, 'bot_chat': bot_chat["answer"]})
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    uploaded_file = request.files['file']
+    user_id = request.form.get('user_id')
+    if uploaded_file:
+        file_name = uploaded_file.filename
+        pdf_record = Pdf.query.filter_by(pdfname= file_name ).first()
+        if pdf_record:
+            flash('File pdf đã tồn tại', 'danger')
+            return 'File uploaded error!'
+        else:
+            new_pdf = Pdf(pdfname = file_name, user_id=user_id)
+            db.session.add(new_pdf)
+            db.session.commit()
+            upload_path = os.path.join('.', 'chatPDF', 'pdf', uploaded_file.filename)
+            uploaded_file.save(upload_path)
+            return 'Tải file thành công!'
+    else:
+        return 'Không có file nào được chọn.'
+
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    data = request.get_json()
+    if 'user_id' in data:
+        user_id = data['user_id']
+        # delete conversation
+        topics_to_delete = db.session.query(Topic).filter_by(user_id=user_id).all()
+        for topic in topics_to_delete:
+            db.session.query(Conversation).filter_by(topic_id=topic.id).delete()
+        # delete topic 
+        db.session.query(Topic).filter_by(user_id=user_id).delete()
+        # delete user 
+        db.session.query(User).filter_by(id=user_id).delete()
+        db.session.commit()
+        return jsonify({'nofitication': 'Xoá người dùng thành công'})
+    else:
+        return jsonify({'error': 'Dữ liệu không hợp lệ'}), 400
+
+@app.route('/delete_pdf', methods=['POST'])
+def delete_pdf():
+    data = request.get_json()
+    if 'pdf_id' in data:
+        pdf_id = data['pdf_id']
+        # xoa file o thu muc
+        pdf = db.session.query(Pdf).filter_by(id=pdf_id).first()
+        file_path = os.path.join('.', 'chatPDF', 'pdf', pdf.pdfname)
+        os.remove(file_path)
+        # delete pdf
+        db.session.query(Pdf).filter_by(id=pdf_id).delete()
+        db.session.commit()
+        return jsonify({'nofitication': 'Xoá file thành công'})
+    else:
+        return jsonify({'error': 'Dữ liệu không hợp lệ'}), 400
+
+@app.route('/delete_feedback', methods=['POST'])
+def delete_feedback():
+    data = request.get_json()
+    if 'feedback_id' in data:
+        feedback_id = data['feedback_id']
+        db.session.query(Feedback).filter_by(id=feedback_id).delete()
+        db.session.commit()
+        return jsonify({'nofitication': 'Xoá phản hồi thành công'})
+    else:
+        return jsonify({'error': 'Dữ liệu không hợp lệ'}), 400
+
+@app.route('/add_feedback', methods=['POST'])
+def add_feedback():
+    data = request.get_json()
+    if 'message' in data:
+        message = data['message']
+        user_id = data['user_id']
+        conversation_id = data['conversation_id']
+        feedback = Feedback( message = message, user_id = user_id, conversation_id = conversation_id)
+        db.session.add(feedback)
+        db.session.commit()
+        flash('Gửi phản hồi thành công', 'success')
+        return jsonify({'nofitication': 'Thêm phản hồi thành công'})
+    else:
+        return jsonify({'error': 'Dữ liệu không hợp lệ'}), 400

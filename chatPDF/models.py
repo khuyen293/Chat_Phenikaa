@@ -14,7 +14,7 @@ class User(db.Model):
 class Topic(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False, default='New chat')
-    date = db.Column(db.DateTime, nullable=False, default=datetime.today())
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     conversations = db.relationship('Conversation', backref='topicdetail', lazy=True)
     def __repr__(self):
@@ -27,3 +27,20 @@ class Conversation(db.Model):
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'), nullable=False)
     def __repr__(self):
         return f"Conversation('{self.id}', '{self.user_chat}', '{self.bot_chat}')"
+
+class Pdf(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pdfname = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    def __repr__(self):
+        return f"Pdf('{self.id}', '{self.pdfname}', '{self.date}', '{self.user_id}')"
+
+class Feedback(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(1000), nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    conversation_id = db.Column(db.Integer, db.ForeignKey('conversation.id'), nullable=False)
+    def __repr__(self):
+        return f"Pdf('{self.id}', '{self.message}', '{self.date}', '{self.user_id}', '{self.conversation_id}')"

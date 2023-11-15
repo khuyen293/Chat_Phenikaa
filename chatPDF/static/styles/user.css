@@ -52,7 +52,6 @@
     padding: 10px 0;
 }
 
-
 .topic-list-title {
     color: #545456;
     font-size: 14px;
@@ -166,7 +165,7 @@
 }
 
 .user-account-box-img span {
-    padding: 8px 10px;
+    padding: 8px;
     background-color: var(--primary-color-2);
     border-radius: 5px;
 }
@@ -204,7 +203,7 @@
 
 .user-chatPDF-conversation {
     position: sticky;
-    height: 85vh;
+    height: 80vh;
     margin-top: 32px;
 }
 
@@ -226,49 +225,48 @@
 
 .user-chat,
 .chat-chat {
-    padding: 10px 150px;
+    padding: 16px 150px;
 }
 
+.user-chat{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chat-chat{
+    display: flex;
+}
 .chat-tk span {
     color: var(--primary-color-2);
     font-weight: 600;
-    padding: 7px 10px;
+    padding: 7px 8px;
     border-radius: 10px;
     background: #e0e0e0;
     box-shadow:  5px 5px 1px #868686,
                 -5px -5px 1px #ffffff;
-}
-
-.chat-AI{
-    display: flex;
 }
 
 .chat-AI span {
     color: var(--primary-color);
-    font-weight: 600;
-    padding: 7px 10px;
+    padding: 7px 9px;
     border-radius: 10px;
     background: #e0e0e0;
     box-shadow:  5px 5px 1px #868686,
                 -5px -5px 1px #ffffff;
+}
+
+.chat-AI span img{
+    width: 19px; 
+    height: 19px; 
+    text-align: center; 
+    margin-top: -5px;
 }
 
 .chat-item {
     text-align: justify;
     color: white;
+    position: relative;
     
-}
-
-.chat-item-left{
-    display: flex; 
-    justify-content: flex-start;
-    align-items: center;
-    cursor: pointer;
-}
-
-.chat-item-right{
-    display: flex; 
-    justify-content: flex-end;    
 }
 
 .chat-item-message{
@@ -279,11 +277,12 @@
     transition: 300ms ease-in-out;
     border: none;
     outline: none;
-    margin: 10px 35px 10px 85px;
     border-top-left-radius: 15px;
     border-top-right-radius: 3px;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
+    max-width: 630px;
+    margin-right: 16px;
 
 }
 
@@ -300,19 +299,18 @@
     border: none;
     outline: none;
     line-height: 30px;
-    margin: 10px 85px 10px 35px;
+    margin-left: 16px;
+    margin-bottom: 0;
+    margin-right: 10px;
+    max-width: 630px;
 }
 
 .chat-item-icon{
     font-size: 25px;
 }
 
-.chat-chat .chat-item {
-    color: var(--primary-color-2);
-}
-
 .chatPDF-message {
-    width: 74%;
+    border: 2px solid var(--primary-color) !important;
     margin: 32px 150px;
     bottom: 32px;
     border-radius: 25px;
@@ -324,6 +322,8 @@
     border: 1px solid #545456;
     padding: 0 16px;
     background-color: white;
+    box-shadow: 2px 5px 10px rgba(0,0,0,0.3);
+
 }
 
 .chatPDF-message textarea {
@@ -335,11 +335,14 @@
     overflow-wrap: break-word;
 }
 
-
-
 .chatPDF-message-btn {
     all: unset;
     color: #757575;
+}
+
+.chat-feelback:hover{
+    color: var(--primary-color-2);
+
 }
 
 /* Tài khoản khi không đăng nhập */
@@ -375,3 +378,164 @@
     transition: box-shadow 0.5s; */
     background-color: #3d3d3e;
 }
+
+.item {
+    padding: 10px 0px 10px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.item:hover {
+    background-color: #3d3d3e;
+    border-radius: 5px;
+}
+
+.controls {
+    display: none;
+}
+
+.item.active {
+    background-color: #3d3d3e;
+    border-radius: 5px;
+}
+
+.item.active .controls {
+    display: block;
+}
+
+.edit-input {
+    display: none;
+    width: 62%;
+    margin-right: 3%;
+}
+
+.edit-input.active {
+    display: block;
+}
+
+.title{
+    width: 62%;
+    margin-right: 3%;
+}
+
+.mes{
+    margin-right: 10px;
+}
+.edit-button,
+.delete-button,
+.save-button,
+.cancel-button
+{
+    background-color: transparent;
+    border: none;
+}
+.edit-button,
+.save-button{
+    margin-right: 2px;
+}
+/* feelback */
+.user-feelback{
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    position: absolute;
+    height: 100vh;
+    z-index: 2;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.box-feelback{
+    width: 50%;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 5px;  
+    animation: feelback ease-in 1s; 
+}
+
+@keyframes feelback{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+.feelback-thumbs{
+    display: flex;
+    align-items: center;
+    padding: 24px 16px;
+}
+
+.feelback-thumbs-icon{
+    position: relative;
+    font-size: 25px;
+    color: var(--primary-color-2);
+    background-color: #e1a1a1;
+    border-radius: 50%;
+    padding: 8px;
+    margin-right: 12px;
+    z-index: 3;
+
+}
+
+.feelback-thumbs span{
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 20px;
+}
+
+.feelback-text{
+    padding: 0 16px 24px 16px;
+}
+
+.feelback-textarea{
+    width: 100%;
+    border-radius: 10px;
+    padding: 8px 16px;
+    border: 1px solid #bbb6b6;
+    outline: none;
+
+}
+
+.feelback-btn{
+    all: unset;
+    padding: 8px;
+    display: flex;
+    float: right;
+    border-radius: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    margin-right: 16px;
+    margin-bottom: 24px;
+}
+
+.feelback-btn:focus{
+    outline: none;
+}
+
+.feelback-btn:hover{
+    background-color: var(--primary-color-2);
+}
+
+.feelback-close{
+    font-size: 20px; 
+    float: right;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--primary-color);
+    padding: 0 8px;
+    cursor: pointer;
+}
+
+.feelback-close:hover{
+    color: var(--white-color);
+    background: var(--primary-color-2);
+    border-radius: 5px;
+}
+
+

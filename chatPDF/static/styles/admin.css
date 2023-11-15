@@ -64,3 +64,12 @@
 .btn-close{
     background-color: var(--primary-color-2);
 }
+
+tr{
+    color: white;
+}
+
+.selected-row {
+    background-color: #C0C0C0;
+    /* Màu nền khi hàng được chọn */
+}

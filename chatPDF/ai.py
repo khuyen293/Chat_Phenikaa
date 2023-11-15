@@ -71,7 +71,16 @@ def get_text_chunks(text):
     return chunks
 
 def get_vectorstore(text_chunks):
-    fs = LocalFileStore("./cache/")
+    fs = LocalFileStore("./cache/all/")
+    underlying_embeddings = OpenAIEmbeddings()
+    cached_embedder = CacheBackedEmbeddings.from_bytes_store(
+    underlying_embeddings, fs, namespace=underlying_embeddings.model
+    )
+    vectorstore = FAISS.from_texts(texts=text_chunks, embedding= cached_embedder)
+    return vectorstore
+
+def get_vectorstoreweb(text_chunks):
+    fs = LocalFileStore("./cache/web/")
     underlying_embeddings = OpenAIEmbeddings()
     cached_embedder = CacheBackedEmbeddings.from_bytes_store(
     underlying_embeddings, fs, namespace=underlying_embeddings.model
@@ -104,9 +113,15 @@ def load_vectorstore(filename):
     return vectorstore
 
 def get_data():
+    web = get_webs_text(["https://phenikaa-uni.edu.vn/vi/events/view/su-kien/phenikaa-university-faculty-of-business-and-economics-conference-pubec-2023", "https://phenikaa-uni.edu.vn/vi/events/view/su-kien/hoi-nghi-nu-khoa-hoc-toan-quoc-lan-thu-iii"])
+    chunkwebs = get_text_chunks(web)
+    vecweb = get_vectorstoreweb(chunkwebs)
+    save_vectorstore(vecweb, './cache/web/vectorstorweb.pkl')
+    print(chunkwebs)
+
     text = get_pdfs_text(["../chatPDF/pdf/Thoi khoa bieu Tuan SHCD K15- Ngày 15.9.2021.pdf","../chatPDF/pdf/Thông báo về việc xin miễn giảm và nộp học phí .pdf", "../chatPDF/pdf/Tb_ra_vao_cong.pdf", "../chatPDF/pdf/ctdtict1-1.pdf"]) + get_webs_text(["https://phenikaa-uni.edu.vn/vi/events/view/su-kien/phenikaa-university-faculty-of-business-and-economics-conference-pubec-2023", "https://phenikaa-uni.edu.vn/vi/events/view/su-kien/hoi-nghi-nu-khoa-hoc-toan-quoc-lan-thu-iii"])
     chunks = get_text_chunks(text)
     vec = get_vectorstore(chunks)
-    save_vectorstore(vec, './cache/vectorstore.pkl')
-
+    save_vectorstore(vec, './cache/all/vectorstore.pkl')
+    
 get_data()

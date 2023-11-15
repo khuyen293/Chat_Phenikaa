@@ -13,119 +13,119 @@
     </div>
     <div class="admin-content">
         <div class="admin-list active">
-            <div class="scroll">
-                <table class="table-bordered admin-content-table">
-                    <thead>
-                        <tr>
-                          <th scope="col" style="width: 50px">#</th>
-                          <th scope="col" style="width: 150px">Thời gian</th>
-                          <th scope="col">File</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td contenteditable="true">Mark</td>
-                          <td contenteditable="true"><input type="file" name="pdf" accept=".pdf"></td>
-                        </tr>
-                      </tbody>
-                  </table>
-            </div>
-
-              <div class="admin-btn d-flex justify-content-end m-5">
-                <button class="btn ml-5 btn-add">Thêm</button>
-                <button class="btn ml-5 btn-close">Xóa</button>
-              </div>
-
+          <div class="scroll">
+            <table class="table-bordered admin-content-table">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 50px">ID</th>
+                  <th scope="col" style="width: 300px">File</th>
+                  <th scope="col">Thời gian</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for pdf in pdfs|reverse %}
+                <tr onclick="selectRow(this)" data-pdf-id = "{{pdf.id}}">
+                  <th scope="row">{{pdf.id}}</th>
+                  <!-- contenteditable="true" -->
+                  <td>{{pdf.pdfname}}</td>
+                  <td>{{ (pdf.date|add_hours).strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        
+          <div class="admin-btn d-flex justify-content-end m-5">
+            <td contenteditable="true"><input style="color: white;" type="file" name="pdf" accept=".pdf" id="fileInput"></td>
+            <button class="btn ml-5 btn-add" id="uploadButton">Thêm</button>
+            <button class="btn ml-5 btn-close" onclick="confirmDelete()">Xóa</button>
+          </div>
+        
         </div>
         <div class="admin-list">
             <div class="scroll">
                 <table class="table-bordered admin-content-table">
                     <thead>
                         <tr>
-                          <th scope="col" style="width: 50px">#</th>
-                          <th scope="col" style="width: 300px">Email</th>
-                          <th scope="col" style="width: 150px">Thời gian</th>
-                          <th scope="col">Phản hồi</th>
+                          <th scope="col" style="width: 50px">ID</th>
+                          <th scope="col" style="width: 150px">Email</th>
+                          <th scope="col" style="width: 100px">Thời gian</th>
+                          <th scope="col" style="width: 200px">Phản hồi</th>
+                          <th scope="col" style="width: 200px">Câu hỏi</th>
+                          <th scope="col">Trả lời</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td contenteditable="true">Mark</td>
-                          <td contenteditable="true">Otto</td>
-                          <td contenteditable="true">Otto</td>
+                        {% for feedback in feedbacks|reverse %}
+                        <tr onclick="selectRow(this)" data-feedback-id = "{{feedback.id}}">
+                          <th scope="row">{{feedback.id}}</th>
+                          <td>{{feedback.user_email}}</td>
+                          <td>{{(feedback.date|add_hours).strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                          <td>{{feedback.message}}</td>
+                          <td>{{feedback.user_chat}}</td>
+                          <td>{{feedback.bot_chat}}</td>
                         </tr>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td contenteditable="true">Mark</td>
-                          <td contenteditable="true">Otto</td>
-                          <td contenteditable="true">Otto</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td contenteditable="true">Mark</td>
-                          <td contenteditable="true">Otto</td>
-                          <td contenteditable="true">Otto</td>
-                        </tr>
-                        
+                        {% endfor %}
                       </tbody>
                   </table>
             </div>
 
               <div class="admin-btn d-flex justify-content-end m-5">
-                <button class="btn ml-5 btn-close">Xóa</button>
+                <button class="btn ml-5 btn-close" onclick="confirmDelete()">Xóa</button>
               </div>
 
         </div>
         <div class="admin-list">
-            <div class="scroll">
-                <table class="table-bordered admin-content-table">
-                    <thead>
-                        <tr>
-                          <th scope="col" style="width: 50px">STT</th>
-                          <th scope="col" style="width: 300px">Tên tài khoản</th>
-                          <th scope="col">Email</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                        </tr>
-                       
-                      </tbody>
-                  </table>
-            </div>
-              <div class="admin-btn d-flex justify-content-end m-5">
-                <button class="btn ml-5 btn-add">Thêm</button>
-                <button class="btn ml-5 btn-close">Xóa</button>
-              </div>
-        </div>       
+          <div class="scroll">
+            <table class="table-bordered admin-content-table">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 50px">ID</th>
+                  <th scope="col" style="width: 300px">Tên tài khoản</th>
+                  <th scope="col">Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in users|reverse %}
+                <tr onclick="selectRow(this)" data-user-id = "{{user.id}}">
+                  <th>{{user.id}}</th>
+                  <td>{{user.username}}</td>
+                  <td>{{user.email}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        
+          <div class="admin-btn d-flex justify-content-end m-5">
+            <button class="btn ml-5 btn-add"><a href="{{url_for('sigup')}}">Thêm</a></button>
+            <button class="btn ml-5 btn-close" onclick="confirmDelete()">Xóa</button>
+          </div>
+        
+        </div>
         <div class="admin-list">
           <div class="user-chatPDF-conversation scroll" id="scrollable-content">
-              {% for conversation in conversations %}
+              {% for conversation in topic.conversations %}
               <div class="user-chat">
-                <div class="chat-tk" style="display: flex; justify-content: flex-end;">
-                  <span class="username">
-                     <i class="fa-solid fa-user"></i>
-                  </span>
-                </div>
-                <div class="chat-item chat-item-right">
+                <div class="chat-item">
                   <p class="chat-item-message">
                     {{ conversation.user_chat }}
                   </p>
+                </div>
+                <div class="chat-tk">
+                  <span class="username">
+                     <i class="fa-solid fa-user"></i>
+                  </span>
                 </div>
               </div>
         
               <div class="chat-chat">
                 <div class="chat-AI">
                   <span>
-                    <i class="fas fa-comment"></i>
+                    <img src="{{url_for('static', filename='images/artificial-intelligence.png')}}"/>
                   </span>
                 </div>
-                <div class="chat-item chat-item-left">
+                <div class="chat-item">
                   <p class="chat-item-messageAI">
                     {{ conversation.bot_chat }}
                   </p>
@@ -142,19 +142,58 @@
         </div>
     </div>
 </div>
+
+<script>
+  document.getElementById('uploadButton').addEventListener('click', function () {
+    var fileInput = document.getElementById('fileInput');
+    var selectedFile = fileInput.files[0];
+
+    if (selectedFile) {
+      var formData = new FormData();
+      formData.append('file', selectedFile);
+      formData.append('user_id', "{{user_id}}");
+      // Tạo một XMLHttpRequest để tải lên tệp
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/upload', true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            console.log('File uploaded successfully');
+            location.reload();
+          } else {
+            console.error('File upload failed');
+          }
+        }
+      };
+      xhr.send(formData);
+    }
+  });
+</script>
+
 <script>
     const adminItems = document.querySelectorAll(".admin-item");
     const adminLists = document.querySelectorAll(".admin-list");
+    const selectedDivIndex = localStorage.getItem("selectedDivIndex");
     adminItems.forEach((item, index) => {
       const adList = adminLists[index];
       item.onclick = function () {
-         document.querySelector(".admin-item.active").classList.remove("active");
-         document.querySelector(".admin-list.active").classList.remove("active");
-
+        document.querySelector(".admin-item.active").classList.remove("active");
+        document.querySelector(".admin-list.active").classList.remove("active");
         this.classList.add("active");
         adList.classList.add("active");
+        localStorage.setItem("selectedDivIndex", index);
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("page", index);
+        const baseUrl = window.location.href.split('?')[0];
+        const newUrl = `${baseUrl}?${urlParams.toString()}`;
+        history.replaceState(null, null, newUrl);
       };
+      if (index.toString() === selectedDivIndex) {
+        item.click();
+      }
+      // console.log(selectedDivIndex);
     });
+    
   </script>
 
 <script>
@@ -170,6 +209,7 @@
 
   sendMessageButton.addEventListener('click', function () {
     const user_chat = messageInput.value;
+    const topic_id = "{{topic.id}}";
     if (user_chat != ""){
     const bot_chat = 'chat';
     messageInput.value = '';
@@ -177,16 +217,17 @@
     const userChatDiv = document.createElement('div');
     userChatDiv.className = 'user-chat';
     userChatDiv.innerHTML = `
-        <div class="chat-tk" style="display: flex; justify-content: flex-end;" id="scrollable-content">
+
+        <div class="chat-item">
+                <p class="chat-item-message">
+                  ${user_chat}
+                <p>
+        </div>
+              <div class="chat-tk" id="scrollable-content">
           <span class="username">
             <i class="fa-solid fa-user"></i>
             </span>
         </div>
-        <div class="chat-item chat-item-right">
-                <p class="chat-item-message">
-                  ${user_chat}
-                <p>
-              </div>
       `;
     conversationContainer.appendChild(userChatDiv);
 
@@ -196,11 +237,11 @@
     chatChatDiv.innerHTML = `
         <div class="chat-AI">
           <span>
-            <i class="fas fa-comment"></i>
+            <img src="{{url_for('static', filename='images/artificial-intelligence.png')}}"/>
           </span>
         </div>
         
-        <div class="chat-item chat-item-left">
+        <div class="chat-item">
                 <p class="chat-item-messageAI">
                   <i class="fa-solid fa-spinner fa-spin"></i>
                 <p>
@@ -209,7 +250,7 @@
 
     fetch('/add_conversation', {
       method: 'POST',
-      body: JSON.stringify({ user_chat: user_chat }),
+      body: JSON.stringify({topic_id: topic_id, user_chat: user_chat }),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -226,7 +267,7 @@
     const words = response.split(" ");
     let index = 0;
     const chatItemMessageAI = chatChatDiv.querySelector(
-      ".chat-item-left .chat-item-messageAI"
+      ".chat-item .chat-item-messageAI"
     );
     let displayingWords = true;
 
@@ -263,6 +304,88 @@
     displayWord();
   }
   scrollBottom();
+</script>
+
+<script>
+  function selectRow(row) {
+    // Remove the "selected-row" class from all rows
+    var rows = document.querySelectorAll('tbody tr');
+    rows.forEach(function (r) {
+      
+      r.classList.remove('selected-row');
+    });
+    // Add the "selected-row" class to the clicked row
+    row.classList.add('selected-row');
+  }
+
+  function confirmDelete() {
+
+    var selectedRow = document.querySelector('.selected-row');
+    if (selectedRow) {
+      // Confirm before deleting
+      const userIdFromAttribute = selectedRow.getAttribute("data-user-id");
+      const pdfIdFromAttribute = selectedRow.getAttribute("data-pdf-id");
+      const feedbackIdFromAttribute = selectedRow.getAttribute("data-feedback-id");
+      // console.log(userIdFromAttribute);
+      if(userIdFromAttribute){
+        var confirmDelete = confirm('Bạn có chắc muốn xoá dữ liệu người dùng này?');
+        if (confirmDelete) {
+          // Delete the selected row if confirmed
+          fetch("/delete_user", {
+            method: "POST",
+            body: JSON.stringify({ user_id: userIdFromAttribute }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          selectedRow.parentNode.removeChild(selectedRow);
+        }
+      }
+      else if(pdfIdFromAttribute){
+        var confirmDelete = confirm('Bạn có chắc muốn xoá tệp pdf này?');
+        if (confirmDelete) {
+          // Delete the selected row if confirmed
+          fetch("/delete_pdf", {
+            method: "POST",
+            body: JSON.stringify({ pdf_id: pdfIdFromAttribute }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          selectedRow.parentNode.removeChild(selectedRow);
+        }
+      }
+      else if(feedbackIdFromAttribute) {
+        var confirmDelete = confirm('Bạn có chắc muốn xoá phản hồi này?');
+        if (confirmDelete) {
+          // Delete the selected row if confirmed
+          fetch("/delete_feedback", {
+            method: "POST",
+            body: JSON.stringify({ feedback_id: feedbackIdFromAttribute }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          selectedRow.parentNode.removeChild(selectedRow);
+        }
+      }
+    }
+     else {
+      alert('No row selected.');
+    }
+  }
+</script>
+
+<script>
+  // Lấy tất cả các hàng trong bảng
+  const rows = document.querySelectorAll("tbody tr");
+  // Lặp qua từng hàng và thêm sự kiện click
+  rows.forEach((row) => {
+    row.addEventListener("click", () => {
+      const userIdFromAttribute = row.getAttribute("data-user-id");
+      // console.log("User ID from attribute:", userIdFromAttribute);
+    });
+  });
 </script>
 
 {% endblock %}

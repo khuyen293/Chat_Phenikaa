@@ -12,38 +12,27 @@
     <div class="user-menu-topic scroll">
       {% for topic in user.topics|reverse %}
       <div class="user-topic">
-        <div class="relative topic-list">
-          <div class="sticky top-0 z-[16]">
-            <h4 class="topic-list-title"></h4>
-          </div>
-          <ul>
-            <li
-              class="relative z-[15] topic-list-item topic"
-              data-topic-id="{{ topic.id }}"
-            >
-              <a href="">
-                <div class="topic-item-name">
-                  <i class="fa-regular fa-message"></i>
-                  <span class="title" id="title">{{ topic.title }}</span>
-                </div>
-              </a>
-              <div class="topic-item-icon">
-                <button class="text-white rename-topic" style="display: none">
-                  <i class="fas fa-pen-to-square"></i>
-                </button>
-                <button class="text-white delete-topic" style="display: none">
-                  <i class="fas fa-trash"></i>
-                </button>
-                <button class="text-white update-topic" style="display: none">
-                  <i class="fa-solid fa-check"></i>
-                </button>
-                <button class="text-white undo-topic" style="display: none">
-                  <i class="fa-solid fa-x"></i>
-                </button>
-              </div>
-            </li>
-          </ul>
-        </div>
+        <ul>
+          <li class="relative z-[15] item" data-topic-id="{{ topic.id }}">
+            <i class="fa-regular fa-message mes"></i>
+            <div class="title">{{ topic.title }}</div>
+            <input type="text" class="edit-input" value="{{topic.title}}">
+            <div class="controls">
+              <button class="text-white edit-button">
+                <i class="fas fa-pen-to-square"></i>
+              </button>
+              <button class="text-white delete-button">
+                <i class="fas fa-trash"></i>
+              </button>
+              <button class="text-white save-button">
+                <i class="fa-solid fa-check"></i>
+              </button>
+              <button class="text-white cancel-button">
+                <i class="fa-solid fa-x" style="font-size: 14px;"></i>
+              </button>
+            </div>
+          </li>
+        </ul>
       </div>
       {% endfor %}
     </div>
@@ -77,27 +66,25 @@
   <div class="user-chatPDF">
     <div class="user-chatPDF-conversation scroll" id="scrollable-content">
       {% for conversation in topic.conversations %}
-
       <div class="user-chat">
-        <div
-          class="chat-tk chat-tk-radius"
-          style="display: flex; justify-content: flex-end"
-        >
-          <span class="username">{{new_name}}</span>
-        </div>
-        <div class="chat-item chat-item-right">
+        <div class="chat-item">
           <p class="chat-item-message">{{ conversation.user_chat }}</p>
         </div>
+        <div class="chat-tk chat-tk-radius">
+          <span class="username">{{new_name}}</span>
+        </div>
       </div>
-
       <div class="chat-chat">
         <div class="chat-AI">
           <span>
-            <i class="fas fa-comment"></i>
+            <img src="{{url_for('static', filename='images/artificial-intelligence.png')}}" />
           </span>
         </div>
-        <div class="chat-item chat-item-left">
+        <div class="chat-item" style="display: flex; align-items: center;">
           <p class="chat-item-messageAI">{{ conversation.bot_chat }}</p>
+          <span class="chat-feelback" data-conversation-id="{{conversation.id}}">
+            <i class="fa-solid fa-comment-dots"></i>
+          </span>
         </div>
       </div>
 
@@ -105,29 +92,157 @@
     </div>
     <div class="background-image"></div>
     <div class="chatPDF-message">
-      <textarea
-        id="messageInput"
-        rows="1"
-        placeholder="Send a message"
-        class=""
-      ></textarea>
+      <textarea id="messageInput" rows="1" placeholder="Send a message" class=""></textarea>
       <button class="chatPDF-message-btn" id="sendMessageButton">
         <i class="fas fa-play"></i>
       </button>
     </div>
   </div>
+
+  <div class="user-feelback">
+    <div class="box-feelback">
+      <button class="feelback-close">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="feelback-thumbs">
+        <i class="fa-regular fa-thumbs-down feelback-thumbs-icon"></i>
+        <span>Cung cấp phản hồi của bạn nếu có thắc mắc</span>
+      </div>
+      <div class="feelback-text">
+        <textarea rows="3" placeholder="Bạn hãy cung cấp phản hồi" class="feelback-textarea"></textarea>
+      </div>
+      <button class="feelback-btn">Phản hồi</button>
+    </div>
+  </div>
 </div>
+
+<script>
+  const items = document.querySelectorAll(".item");
+  // Kiểm tra xem đã có trạng thái được lưu trong localStorage chưa
+  const selectedDivIndex = localStorage.getItem("selectedDivIndex");
+
+  items.forEach((item, index) => {
+    const title = item.querySelector(".title");
+    const editInput = item.querySelector(".edit-input");
+    const controls = item.querySelector(".controls");
+    const editButton = item.querySelector(".edit-button");
+    const deleteButton = item.querySelector(".delete-button");
+    const saveButton = item.querySelector(".save-button");
+    const cancelButton = item.querySelector(".cancel-button");
+
+    // Hiển thị nút "Sửa" và ẩn nút "Lưu" và "Hủy" khi trạng thái không phải là "chỉnh sửa"
+    function exitEditMode() {
+      title.style.display = "block";
+      editInput.style.display = "none";
+      controls.classList.remove("edit-mode");
+      editButton.style.display = "inline-block";
+      deleteButton.style.display = "inline-block";
+      saveButton.style.display = "none";
+      cancelButton.style.display = "none";
+    }
+
+    // Hiển thị nút "Lưu" và "Hủy" và ẩn nút "Sửa" khi bắt đầu chỉnh sửa
+    function enterEditMode() {
+      title.style.display = "none";
+      editInput.style.display = "block";
+      controls.classList.add("edit-mode");
+      editButton.style.display = "none";
+      deleteButton.style.display = "none";
+      saveButton.style.display = "inline-block";
+      cancelButton.style.display = "inline-block";
+      editInput.focus();
+    }
+
+    item.addEventListener("click", () => {
+      items.forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+      // Lưu trạng thái của div đã chọn vào localStorage
+      localStorage.setItem("selectedDivIndex", index);
+      exitEditMode(); // Đảm bảo thoát khỏi chế độ chỉnh sửa khi chuyển div
+      console.log('hha');
+    });
+
+    editButton.addEventListener("click", (event) => {
+      event.stopPropagation(); // Ngăn chặn sự kiện click lan ra bên ngoài div
+      enterEditMode();
+    });
+
+    editInput.addEventListener("click", (event) => {
+      event.stopPropagation(); // Ngăn chặn sự kiện click lan ra bên ngoài div
+      enterEditMode();
+    });
+
+    cancelButton.addEventListener("click", (event) => {
+      event.stopPropagation(); // Ngăn chặn sự kiện click lan ra bên ngoài div
+      editInput.value = title.textContent; // Lấy lại tiêu đề cũ
+      exitEditMode();
+    });
+
+    saveButton.addEventListener("click", (event) => {
+      event.stopPropagation(); // Ngăn chặn sự kiện click lan ra bên ngoài div
+      title.textContent = editInput.value;
+      var updatedTitle = title.textContent;
+      var topic_id = item.getAttribute("data-topic-id");
+      fetch("/rename_topic", {
+        method: "POST",
+        body: JSON.stringify({
+          updatedTitle: updatedTitle,
+          topic_id: topic_id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      exitEditMode();
+    });
+
+    deleteButton.addEventListener("click", (event) => {
+      event.stopPropagation(); // Ngăn chặn sự kiện click lan ra bên ngoài div
+      if (confirm("Bạn có chắc muốn xóa topic này?")) {
+        item.remove();
+        var topic_id = item.getAttribute("data-topic-id");
+        console.log(topic_id);
+        fetch("/delete_topic", {
+          method: "POST",
+          body: JSON.stringify({ user: "{{user}}", topic_id: topic_id }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then(res => res.json())
+          .then((data) => {
+            // showResponse(data.bot_chat, chatChatDiv);
+            console.log(data.last_topic_id);
+            const urlParams = new URLSearchParams(window.location.search);
+            const newTopic = data.last_topic_id;
+            // console.log(newTopic);
+            urlParams.set("topic", newTopic);
+            history.replaceState(null, null, `?${urlParams.toString()}`);
+            // index = data.last_topic_id;
+            // item.click();
+          });
+      }
+      location.reload();
+    });
+
+    // Kiểm tra nếu div này đã được lựa chọn trước đó, thì mặc định nó là được chọn khi trang tải lại
+    if (index.toString() === selectedDivIndex) {
+      item.click();
+    }
+  });
+</script>
 
 <!-- Click topic -->
 <script>
   // click topic
-  const topicDivs = document.querySelectorAll(".topic");
+  const topicDivs = document.querySelectorAll(".item");
   topicDivs.forEach(function (topicDiv) {
     topicDiv.addEventListener("click", function () {
       const topicId = topicDiv.getAttribute("data-topic-id");
       const urlParams = new URLSearchParams(window.location.search);
       urlParams.set("topic", topicId);
       history.replaceState(null, null, `?${urlParams.toString()}`);
+      location.reload();
     });
   });
 </script>
@@ -157,108 +272,11 @@
       const urlParams = new URLSearchParams(window.location.search);
       const newTopic = parseInt("{{user.topics[-1].id}}", 10) + 1;
       urlParams.set("topic", newTopic);
+      items[0].click();
       history.replaceState(null, null, `?${urlParams.toString()}`);
     });
 </script>
 
-<script>
-  var userTopics = document.querySelectorAll(".user-topic");
-  var selectedTopic = null; // Biến để theo dõi div đã được chọn
-  var selectedRename = null;
-  var selectedDelete = null;
-  userTopics.forEach(function (userTopic) {
-    var titleContainer = userTopic.querySelector(".topic-item-icon");
-    var titleElement = userTopic.querySelector(".title");
-    var renameButton = titleContainer.querySelector(".rename-topic");
-    var deleteButton = titleContainer.querySelector(".delete-topic");
-    var updateButton = titleContainer.querySelector(".update-topic");
-    var undoButton = titleContainer.querySelector(".undo-topic");
-    var topic = userTopic.querySelector(".topic");
-    var topicElement = userTopic.querySelector(".topic-item-name");
-    var text1 = titleElement.textContent;
-    titleContainer.addEventListener("click", function () {
-      renameButton.style.display = "inline-block";
-      deleteButton.style.display = "inline-block";
-      if (selectedTopic) {
-        selectedTopic.style.backgroundColor = "black";
-        selectedTopic.style.borderRadius = "5px";
-        selectedRename.style.display = "none";
-        selectedDelete.style.display = "none";
-      }
-      topic.style.backgroundColor = "#757575";
-      selectedTopic = topic;
-      selectedRename = renameButton;
-      selectedDelete = deleteButton;
-    });
-
-    // Bắt sự kiện khi nhấp vào nút sửa
-    renameButton.addEventListener("click", function () {
-      titleElement.contentEditable = true;
-      titleElement.focus();
-      renameButton.style.display = "none";
-      deleteButton.style.display = "none";
-      updateButton.style.display = "inline-block";
-      undoButton.style.display = "inline-block";
-    });
-
-    updateButton.addEventListener("click", function () {
-      titleElement.contentEditable = false;
-      renameButton.style.display = "inline-block";
-      deleteButton.style.display = "inline-block";
-      updateButton.style.display = "none";
-      undoButton.style.display = "none";
-      var updatedTitle = titleElement.textContent;
-      var topic_id = userTopic
-        .querySelector(".topic-list-item")
-        .getAttribute("data-topic-id");
-      fetch("/rename_topic", {
-        method: "POST",
-        body: JSON.stringify({
-          updatedTitle: updatedTitle,
-          topic_id: topic_id,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        // .then(response => response.json())  // Chuyển đổi phản hồi sang định dạng JSON
-        .then((data) => {
-          // Sử dụng giá trị đã trả về, ví dụ: new_topic_id
-          const newTopicId = data.topic;
-
-          // Tiếp tục xử lý hoặc hiển thị giá trị theo ý muốn
-          console.log(data);
-        });
-    });
-
-    undoButton.addEventListener("click", function () {
-      titleElement.contentEditable = false;
-      renameButton.style.display = "inline-block";
-      deleteButton.style.display = "inline-block";
-      updateButton.style.display = "none";
-      undoButton.style.display = "none";
-      titleElement.textContent = text1;
-    });
-
-    deleteButton.addEventListener("click", function () {
-      if (confirm("Are you sure you want to delete this title?")) {
-        // Sau đó, ẩn phần tử titleContainer
-        userTopic.style.display = "none";
-        var topic_id = userTopic
-          .querySelector(".topic-list-item")
-          .getAttribute("data-topic-id");
-        fetch("/delete_topic", {
-          method: "POST",
-          body: JSON.stringify({ topic_id: topic_id }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      }
-    });
-  });
-</script>
-<!-- Gửi tin nhắn và nhận câu trả lời -->
 <script>
   const scrollableContent = document.getElementById("scrollable-content");
   function scrollBottom() {
@@ -278,13 +296,13 @@
       const userChatDiv = document.createElement("div");
       userChatDiv.className = "user-chat";
       userChatDiv.innerHTML = `
-            <div class="chat-tk chat-tk-radius" style="display: flex; justify-content: flex-end">
-                <span class="username">{{ new_name }}</span>
-            </div>
-            <div class="chat-item chat-item-right">
+            <div class="chat-item">
                 <p class="chat-item-message">
                     ${user_chat}
                 </p>
+            </div>
+            <div class="chat-tk chat-tk-radius">
+                <span class="username">{{ new_name }}</span>
             </div>
         `;
       const conversationContainer = document.querySelector(
@@ -300,13 +318,16 @@
       chatChatDiv.innerHTML = `
             <div class="chat-AI">
                 <span>
-                    <i class="fas fa-comment"></i>
+                  <img src="{{url_for('static', filename='images/artificial-intelligence.png')}}"/>
                 </span>
             </div>
-            <div class="chat-item chat-item-left">
+            <div class="chat-item" style="display: flex; align-items: center;">
                 <p class="chat-item-messageAI">
                     <i class="fa-solid fa-spinner fa-spin"></i>
                 </p>
+                <span class="chat-feelback" style="display: none">
+                  <i class="fa-solid fa-comment-dots"></i>
+                </span>
             </div>`;
 
       fetch("/add_conversation", {
@@ -331,9 +352,8 @@
   function showResponse(response, chatChatDiv) {
     const words = response.split(" ");
     let index = 0;
-    const chatItemMessageAI = chatChatDiv.querySelector(
-      ".chat-item-left .chat-item-messageAI"
-    );
+    const chatItemMessageAI = chatChatDiv.querySelector(".chat-item .chat-item-messageAI");
+    const feelbackButton = chatChatDiv.querySelector(".chat-item .chat-feelback");
     let displayingWords = true;
 
     function clickHandler() {
@@ -343,6 +363,9 @@
         chatItemMessageAI.innerHTML = response;
         scrollBottom();
         chatItemMessageAI.removeEventListener("click", clickHandler);
+
+        // Hiển thị nút Feelback sau khi hiển thị toàn bộ câu trả lời
+        feelbackButton.style.display = 'block';
       }
     }
     // Thêm sự kiện click
@@ -363,11 +386,48 @@
         // Nếu đã hiển thị hết từ, xóa sự kiện click và hiển thị toàn bộ
         chatItemMessageAI.removeEventListener("click", clickHandler);
         chatItemMessageAI.innerHTML = response;
+        // Hiển thị nút Feelback sau khi hiển thị toàn bộ câu trả lời
+        feelbackButton.style.display = 'block';
       }
       scrollBottom();
     }
+
     displayWord();
   }
   scrollBottom();
+</script>
+
+<script>
+
+</script>
+
+<script>
+  const chatFeelbacks = document.querySelectorAll('.chat-feelback');
+  const feelback = document.querySelector('.user-feelback');
+  const feelbackBtn = document.querySelector('.feelback-btn');
+  const feelbackTextarea = document.querySelector('.feelback-textarea');
+  chatFeelbacks.forEach(function (chatFeelback) {
+    const conversationIdFromAttribute = chatFeelback.getAttribute("data-conversation-id");
+    chatFeelback.addEventListener('click', function () {
+      feelback.style.display = 'flex';
+      feelbackBtn.addEventListener('click', function () {
+        const feedbackValue = feelbackTextarea.value;
+        fetch("/add_feedback", {
+          method: "POST",
+          body: JSON.stringify({ user_id: "{{user.id}}", conversation_id: conversationIdFromAttribute, message: feedbackValue }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        feelback.style.display = 'none';
+        // Thực hiện các hành động khác với giá trị phản hồi nếu cần
+      });
+    });
+  });
+
+  var closeIcon = document.querySelector('.feelback-close');
+  closeIcon.addEventListener('click', function () {
+    feelback.style.display = 'none';
+  });
 </script>
 {% endblock %}

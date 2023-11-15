@@ -15,25 +15,25 @@
     <div class="user-chatPDF-conversation scroll" id="scrollable-content">
       {% for conversation in conversations %}
       <div class="user-chat">
-        <div class="chat-tk" style="display: flex; justify-content: flex-end;">
-          <span class="username">
-            <i class="fa-solid fa-user"></i>
-          </span>
-        </div>
-        <div class="chat-item chat-item-right">
+        <div class="chat-item">
           <p class="chat-item-message">
             {{ conversation.user_chat }}
           </p>
+        </div>
+        <div class="chat-tk">
+          <span class="username">
+            <i class="fa-solid fa-user"></i>
+          </span>
         </div>
       </div>
 
       <div class="chat-chat">
         <div class="chat-AI">
           <span>
-            <i class="fas fa-comment"></i>
+            <img src="{{url_for('static', filename='images/artificial-intelligence.png')}}"/>
           </span>
         </div>
-        <div class="chat-item chat-item-left">
+        <div class="chat-item">
           <p class="chat-item-messageAI">
             {{ conversation.bot_chat }}
           </p>
@@ -83,16 +83,16 @@
     const userChatDiv = document.createElement('div');
     userChatDiv.className = 'user-chat';
     userChatDiv.innerHTML = `
-        <div class="chat-tk" style="display: flex; justify-content: flex-end;" id="scrollable-content">
-          <span class="username">
-            <i class="fa-solid fa-user"></i>
-            </span>
-        </div>
-        <div class="chat-item chat-item-right">
+        <div class="chat-item">
                 <p class="chat-item-message">
                   ${user_chat}
                 <p>
               </div>
+              <div class="chat-tk"id="scrollable-content">
+          <span class="username">
+            <i class="fa-solid fa-user"></i>
+            </span>
+        </div>
       `;
     conversationContainer.appendChild(userChatDiv);
 
@@ -102,11 +102,11 @@
     chatChatDiv.innerHTML = `
         <div class="chat-AI">
           <span>
-            <i class="fas fa-comment"></i>
+            <img src="{{url_for('static', filename='images/artificial-intelligence.png')}}"/>
           </span>
         </div>
         
-        <div class="chat-item chat-item-left">
+        <div class="chat-item">
                 <p class="chat-item-messageAI">
                   <i class="fa-solid fa-spinner fa-spin"></i>
                 <p>
@@ -132,7 +132,7 @@
     const words = response.split(" ");
     let index = 0;
     const chatItemMessageAI = chatChatDiv.querySelector(
-      ".chat-item-left .chat-item-messageAI"
+      ".chat-item .chat-item-messageAI"
     );
     let displayingWords = true;
 

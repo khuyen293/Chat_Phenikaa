@@ -9,4 +9,4 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.app_context().push() 
 from chatPDF import routes
-from chatPDF.models import User, Topic, Conversation
+from chatPDF.models import User, Topic, Conversation, Pdf, Feedback
