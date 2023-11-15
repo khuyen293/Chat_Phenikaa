@@ -32,8 +32,7 @@ Là những sinh viên khoa Công nghệ thông tin trường Đại học Pheni
 ![400018804_3637133953221673_8754146306600761556_n](https://github.com/khuyen293/Undefined/assets/96454951/01220c13-0300-4dbb-b37b-a930f05a6439)
 
 
-**Hệ thống mô hình**
-https://github.com/khuyen293/Undefined/issues/3#issue-1995442241
+
 
 
 
