@@ -27,6 +27,8 @@ Là những sinh viên khoa Công nghệ thông tin trường Đại học Pheni
 **Flask** đưa ra các đề xuất nhưng không thực thi bất kỳ sự phụ thuộc hoặc bố cục dự án nào. Nhà phát triển có quyền lựa chọn các công cụ và thư viện mà họ muốn sử dụng. Có nhiều tiện ích mở rộng được cộng đồng cung cấp giúp việc thêm chức năng mới trở nên dễ dàng.
 
 **🦜️🔗 LangChain** : Langchain là một mạng neural kết nối ngôn ngữ không gian-thời gian, được phát triển bởi Google AI vào năm 2022. Nó được thiết kế để hiểu và tạo ra văn bản, đồng thời học các mô hình ngôn ngữ phức tạp. Langchain hoạt động bằng cách chia văn bản thành các đoạn nhỏ, mỗi đoạn được đại diện bởi một vector. Các vector này sau đó được kết nối với nhau bằng các trọng số, tạo thành một mạng neural. Mạng neural này có thể học các mô hình ngôn ngữ phức tạp bằng cách phân tích văn bản.
+**Hệ thống mô hình**
+https://github.com/khuyen293/Undefined/issues/3#issue-1995442241
 
 
 
