@@ -44,3 +44,6 @@ class Feedback(db.Model):
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversation.id'), nullable=False)
     def __repr__(self):
         return f"Pdf('{self.id}', '{self.message}', '{self.date}', '{self.user_id}', '{self.conversation_id}')"
+
+
+

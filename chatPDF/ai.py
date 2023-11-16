@@ -59,7 +59,6 @@ def get_webs_text(urls):
         all_texts += result
     return all_texts
 
-
 def get_text_chunks(text):
     text_splitter = CharacterTextSplitter(
         separator="\n",

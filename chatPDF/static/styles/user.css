@@ -340,10 +340,29 @@
     color: #757575;
 }
 
+.chat-volume{
+    margin-left: 12px;
+}
+
+ .chat-volume {
+     cursor: pointer;
+ }
+
+ .volume i {
+     font-size: 24px;
+ }
+
 .chat-feelback:hover{
     color: var(--primary-color-2);
+    cursor: pointer;
 
 }
+
+/* Ẩn icon "volume-high" ban đầu */
+/* #volume-high {
+    display: none;
+} */
+
 
 /* Tài khoản khi không đăng nhập */
 
@@ -538,4 +557,9 @@
     border-radius: 5px;
 }
 
+.microphone{
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+}
 

@@ -11,10 +11,10 @@ from langchain.chains import ConversationalRetrievalChain
 
 import os  
 from dotenv import load_dotenv
-# Load .env file
+
 load_dotenv()
 # Lấy giá trị của biến môi trường từ tệp .env
-openai_api_key = os.getenv('OPENAI_API_KEY')
+# openai_api_key = os.getenv('OPENAI_API_KEY')
 
 prompt = """You are an AI assistant created by Phenikaa University to answer questions about the university and have friendly conversations with students. 
 Your goal is to be helpful, exactly. 
@@ -39,8 +39,6 @@ def load_vectorstore(filename):
 vec = load_vectorstore("./chatPDF/cache/all/vectorstore.pkl")
 vecweb = load_vectorstore("./chatPDF/cache/web/vectorstorweb.pkl")
 
-
-
 @app.template_filter('add_hours')
 def add_hours(dt):
     return dt + timedelta(hours=7)
@@ -62,7 +60,6 @@ def convert_name_to_abbreviation(name):
 
     return abbreviation
 
-
 @app.route('/')
 @app.route('/home')
 def home():  
@@ -82,9 +79,9 @@ def login():
                 db.session.commit()
             return redirect(url_for('admin', user=user.id)) if user.role == 'admin' else redirect(url_for('baseuser', user=user.id))
         else:
-            flash('Đăng nhập không thành cồng, vui lòng kiểm tra lại tài khoản hoặc mật khẩu', 'danger')
+            flash('Đăng nhập không thành công, vui lòng kiểm tra lại tài khoản hoặc mật khẩu', 'danger')
     return render_template('login.html')
-    
+
 @app.route('/sigup', methods=["GET", "POST"])
 def sigup():
     if request.method == 'POST':
@@ -192,12 +189,12 @@ def add_conversation():
         conversation = Conversation( user_chat = user_chat, bot_chat = bot_chat["answer"], topic_id = topic_id)
         db.session.add(conversation)
         db.session.commit()
+        # text_to_speech(bot_chat["answer"])
         return jsonify({'user_chat': user_chat, 'bot_chat': bot_chat["answer"]})
     else:
         user_chat = data['user_chat']
         bot_chat = get_conversation_chain(vecweb)({"question": (prompt + user_chat)})
         return jsonify({'user_chat': user_chat, 'bot_chat': bot_chat["answer"]})
-
 @app.route('/upload', methods=['POST'])
 def upload_file():
     uploaded_file = request.files['file']
@@ -273,7 +270,15 @@ def add_feedback():
         feedback = Feedback( message = message, user_id = user_id, conversation_id = conversation_id)
         db.session.add(feedback)
         db.session.commit()
-        flash('Gửi phản hồi thành công', 'success')
         return jsonify({'nofitication': 'Thêm phản hồi thành công'})
     else:
         return jsonify({'error': 'Dữ liệu không hợp lệ'}), 400
+
+# @app.route('/out_voice', methods=['POST'])
+# def out_voice():
+#     data = request.get_json()
+#     if 'conversation' in data:
+#         conversation = data['conversation']
+
+#     else:
+#         return jsonify({'error': 'Dữ liệu không hợp lệ'}), 400

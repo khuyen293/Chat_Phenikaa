@@ -80,10 +80,18 @@
             <img src="{{url_for('static', filename='images/artificial-intelligence.png')}}" />
           </span>
         </div>
-        <div class="chat-item" style="display: flex; align-items: center;">
+        <div class="chat-item" style="display: flex;">
           <p class="chat-item-messageAI">{{ conversation.bot_chat }}</p>
           <span class="chat-feelback" data-conversation-id="{{conversation.id}}">
             <i class="fa-solid fa-comment-dots"></i>
+          </span>
+          <span class="chat-volume" data-conversation="{{conversation.bot_chat}}">
+            <span class="volume volumeOff">
+              <i class="fa-solid fa-volume-xmark"></i>
+            </span>
+            <span class="volume volumeOn" style="display: none;">
+              <i class="fa-solid fa-volume-high"></i>
+            </span>
           </span>
         </div>
       </div>
@@ -211,23 +219,19 @@
         })
           .then(res => res.json())
           .then((data) => {
-            // showResponse(data.bot_chat, chatChatDiv);
-            console.log(data.last_topic_id);
-            const urlParams = new URLSearchParams(window.location.search);
-            const newTopic = data.last_topic_id;
-            // console.log(newTopic);
-            urlParams.set("topic", newTopic);
-            history.replaceState(null, null, `?${urlParams.toString()}`);
-            // index = data.last_topic_id;
-            // item.click();
+            location.reload();
           });
       }
-      location.reload();
+      
     });
 
     // Kiểm tra nếu div này đã được lựa chọn trước đó, thì mặc định nó là được chọn khi trang tải lại
     if (index.toString() === selectedDivIndex) {
       item.click();
+      const urlParams = new URLSearchParams(window.location.search);
+      const newTopic = item.getAttribute("data-topic-id");
+      urlParams.set("topic", newTopic);
+      history.replaceState(null, null, `?${urlParams.toString()}`);
     }
   });
 </script>
@@ -265,7 +269,6 @@
         .then((data) => {
           // Sử dụng giá trị đã trả về, ví dụ: new_topic_id
           const newTopicId = data.error;
-
           // Tiếp tục xử lý hoặc hiển thị giá trị theo ý muốn
           console.log(`New topic ID: ${newTopicId}`);
         });
@@ -408,10 +411,14 @@
   const feelbackTextarea = document.querySelector('.feelback-textarea');
   chatFeelbacks.forEach(function (chatFeelback) {
     const conversationIdFromAttribute = chatFeelback.getAttribute("data-conversation-id");
+    console.log(conversationIdFromAttribute);
     chatFeelback.addEventListener('click', function () {
       feelback.style.display = 'flex';
       feelbackBtn.addEventListener('click', function () {
         const feedbackValue = feelbackTextarea.value;
+        console.log("{{user.id}}");
+        console.log(conversationIdFromAttribute);
+        console.log(feedbackValue);
         fetch("/add_feedback", {
           method: "POST",
           body: JSON.stringify({ user_id: "{{user.id}}", conversation_id: conversationIdFromAttribute, message: feedbackValue }),
@@ -430,4 +437,43 @@
     feelback.style.display = 'none';
   });
 </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const volumeControls = document.querySelectorAll('.chat-volume');
+
+    volumeControls.forEach(function (volumeControl) {
+      const volumeOff = volumeControl.querySelector('.volumeOff');
+      const volumeOn = volumeControl.querySelector('.volumeOn');
+      // Bắt sự kiện click cho từng phần tử
+      volumeControl.addEventListener('click', function () {
+        conversation = volumeControl.getAttribute("data-conversation");
+
+        // Toggle giữa hiển thị và ẩn các icon
+        if (volumeOff.style.display !== 'none') {
+          volumeOff.style.display = 'none';
+          volumeOn.style.display = 'block';
+          // Thực hiện các công việc khi âm thanh được bật
+          console.log('Volume is ON');
+          fetch("/out_voice", {
+            method: "POST",
+            body: JSON.stringify({
+               conversation: conversation
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+
+          // Thực hiện các công việc khi âm thanh được tắt
+        } else {
+          volumeOff.style.display = 'block';
+          volumeOn.style.display = 'none';
+          console.log('Volume is OFF');
+        }
+      });
+    });
+  });
+</script>
+
 {% endblock %}
