@@ -84,6 +84,16 @@ def get_web_info_text(url):
         print("Không tìm thấy nội dung.")
     return text
 
+def read_links_from_file(file_path):
+    with open(file_path, 'r') as file:
+        # Đọc tất cả các dòng trong file
+        lines = file.readlines()
+        
+        # Lọc ra các đường link bằng cách loại bỏ dấu xuống dòng và khoảng trắng thừa
+        links = [line.strip() for line in lines]
+
+        return links
+
 def get_webs_text(urls):
     all_texts = ""
     for url in urls:
@@ -143,11 +153,11 @@ def load_vectorstore(filename):
         vectorstore = pickle.load(file)
     return vectorstore
 
-pdf_folder = '../main/pdf'
+pdf_folder = '../chatPDF/pdf'
 pdf_files = [os.path.join(pdf_folder, filename) for filename in os.listdir(pdf_folder) if filename.endswith('.pdf')]
 
 def get_data():
-    web = get_webs_text(read_links_from_file("../main/web/links.txt")) + get_web_contact_text("https://phenikaa-uni.edu.vn/vi/page/lien-he") + get_web_info_text("https://dichvuuytin.com/truong-dai-hoc-phenikaa-gioi-thieu-lich-su-chat-luong-dao-tao-co-so-vat-chat-hoc-phi-va-chinh-sach-ho-tro-sinh-vien/")
+    web = get_webs_text(read_links_from_file("../chatPDF/web/links.txt")) + get_web_contact_text("https://phenikaa-uni.edu.vn/vi/page/lien-he") + get_web_info_text("https://dichvuuytin.com/truong-dai-hoc-phenikaa-gioi-thieu-lich-su-chat-luong-dao-tao-co-so-vat-chat-hoc-phi-va-chinh-sach-ho-tro-sinh-vien/")
     chunkwebs = get_text_chunks(web)
     vecweb = get_vectorstoreweb(chunkwebs)
     save_vectorstore(vecweb, './cache/web/vectorstorweb.pkl')
