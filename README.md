@@ -1,13 +1,17 @@
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
-# Chat Phenikaa
+# Chatbot Phenikaa
 
-## Mô tả vấn đề:
-Là những sinh viên khoa Công nghệ thông tin trường Đại học Phenikaa, chúng tôi đã được sử dụng rất nhiều tiện ích và công nghệ từ trường đại học của mình. Chúng tôi rất thích thú và tự hào, nhưng điều đó vô tình khiến lượng thông tin cần xử lí mỗi ngày đến rất nhiều và rời rạc với nhau. Đôi khi chúng tôi có thể bị quên và bỏ lỡ những thông tin quan trọng về lịch học, lịch nộp bài tập, sự kiện của trường, các thông báo về hành chính, … Điều đó ảnh hưởng trực tiếp tới kết quả học tập và trải nghiệm trong môi trường đại học không chỉ của chúng tôi mà còn của rất nhiều sinh viên khác trong trường.
+## Mô tả: 
+Chatbot Phenikaa là ứng dụng cho phép người dùng có thể tra cứu thông tin, tương tác với chatbot tự động.   
 
-## Giải pháp:
-   Để tiết kiệm thời gian một cách tối đa và giúp cho người tìm kiếm có thể hiểu rõ ràng và chi tiết về một vấn đề liên quan đến nhà trường, chúng tôi đã lên ý tưởng và thực hiện việc xây dựng sản phẩm ChatPDF dành riêng cho trường đại học Phenikaa. Sản phẩm này sẽ giúp cho việc tìm kiếm những vấn đề liên quan đến trường đại học Phenikaa được trả lời một cách nhanh gọn, rõ ràng, chi tiết nhất có thể.
+Mục tiêu của dự án là tạo ra một hệ thống chatbot linh hoạt và thông minh, nhằm cung cấp dịch vụ hỗ trợ và thông tin đa dạng, từ thông tin về chương trình học tập đến các thông báo sự kiện và tư vấn về dịch vụ sinh viên.    
+  
+Chúng tôi cũng cung cấp giao diện trực quan, giúp người dùng có thể dễ dàng thao tác với ứng dụng.
+
+## Giao diện minh họa 
+![Ảnh chụp màn hình 2023-11-16 075552](https://github.com/khuyen293/Undefined/assets/94832743/9458648e-a23b-4c2f-b5b0-6785af27c6a9)
 
 ## Phạm vi:
 Ứng dụng web chatbot có thể truy cập bởi bất kỳ ai muốn tìm hiểu thông tin về trường, nếu là sinh viên hay cán bộ, giảng viên, nhân viên của trường thì có thể hỏi về các quy chế, quy định và hoạt động của trường thông qua tài liệu PDF được tải lên bởi admin
@@ -29,10 +33,26 @@ Là những sinh viên khoa Công nghệ thông tin trường Đại học Pheni
 **🦜️🔗 LangChain** : Langchain là một mạng neural kết nối ngôn ngữ không gian-thời gian, được phát triển bởi Google AI vào năm 2022. Nó được thiết kế để hiểu và tạo ra văn bản, đồng thời học các mô hình ngôn ngữ phức tạp. Langchain hoạt động bằng cách chia văn bản thành các đoạn nhỏ, mỗi đoạn được đại diện bởi một vector. Các vector này sau đó được kết nối với nhau bằng các trọng số, tạo thành một mạng neural. Mạng neural này có thể học các mô hình ngôn ngữ phức tạp bằng cách phân tích văn bản.
 
 ## Mô hình hệ thống
-   ![400018804_3637133953221673_8754146306600761556_n](https://github.com/khuyen293/Undefined/assets/96454951/01220c13-0300-4dbb-b37b-a930f05a6439)
+   ![Structure](https://github.com/khuyen293/Undefined/assets/96828322/d671e71b-48c1-4223-b026-30b2f4371ef8)
+
+   Hệ thống gồm 2 phân quyền dữ liệu chính:  
+    - Người dùng không sử dụng tài khoản email của trường sẽ bị giới hạn nội dung tìm kiếm (không thể truy cập những tài liệu PDF của trường gửi cho sinh viên).  
+    - Người dùng có sử dụng tài khoản có thể truy tra cứu, tìm kiếm với nội dung nội bộ
+   Input và output có thể được xử lí qua định dạng voice và text
+  
+## Hướng dẫn sử dụng
+1. Clone my repo:  
+``` git clone https://github.com/khuyen293/Undefined ```
+2. Thêm file .env vào thư mục gốc  
+3. Thêm biến OPENAI_API_KEY     
+   ``` OPENAI_API_KEY = "sk - ..." ```
+4. Install các thư viện cần thiết  
+   ``` pip install -r requirements ```
+5. Chạy chương trình  
+   ``` python run.py```
 
 
-
-
-
+## Tính năng
+- [x] Chat with GPT-3.5
+- [x] Easy to operate
 
